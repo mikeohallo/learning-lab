@@ -138,6 +138,101 @@
    "text": "Have another look."
   },
   {
+   "id": "f_want_1",
+   "kind": "prompt",
+   "text": "This monster wants one cookie."
+  },
+  {
+   "id": "f_want_2",
+   "kind": "prompt",
+   "text": "This monster wants two cookies."
+  },
+  {
+   "id": "f_want_3",
+   "kind": "prompt",
+   "text": "This monster wants three cookies."
+  },
+  {
+   "id": "f_want_4",
+   "kind": "prompt",
+   "text": "This monster wants four cookies."
+  },
+  {
+   "id": "f_want_5",
+   "kind": "prompt",
+   "text": "This monster wants five cookies."
+  },
+  {
+   "id": "f_want_6",
+   "kind": "prompt",
+   "text": "This monster wants six cookies."
+  },
+  {
+   "id": "f_want_7",
+   "kind": "prompt",
+   "text": "This monster wants seven cookies."
+  },
+  {
+   "id": "f_want_8",
+   "kind": "prompt",
+   "text": "This monster wants eight cookies."
+  },
+  {
+   "id": "f_want_9",
+   "kind": "prompt",
+   "text": "This monster wants nine cookies."
+  },
+  {
+   "id": "f_want_10",
+   "kind": "prompt",
+   "text": "This monster wants ten cookies."
+  },
+  {
+   "id": "f_tap",
+   "kind": "prompt",
+   "text": "Tap the jar to put cookies on the plate."
+  },
+  {
+   "id": "f_more",
+   "kind": "prompt",
+   "text": "Still hungry! Put some more on."
+  },
+  {
+   "id": "f_less",
+   "kind": "prompt",
+   "text": "Oh no, too many! Take some away."
+  },
+  {
+   "id": "f_one_more",
+   "kind": "prompt",
+   "text": "This monster wants one more!"
+  },
+  {
+   "id": "f_one_less",
+   "kind": "prompt",
+   "text": "This monster wants one less."
+  },
+  {
+   "id": "f_yum",
+   "kind": "praise",
+   "text": "Yum yum!"
+  },
+  {
+   "id": "m_more",
+   "kind": "prompt",
+   "text": "Which side has more?"
+  },
+  {
+   "id": "m_fewer",
+   "kind": "prompt",
+   "text": "Which side has fewer?"
+  },
+  {
+   "id": "m_count",
+   "kind": "prompt",
+   "text": "Let's count them."
+  },
+  {
    "id": "try_again",
    "kind": "prompt",
    "text": "Try again."

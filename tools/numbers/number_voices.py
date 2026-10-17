@@ -12,7 +12,7 @@ The lines and the voice are in number_lines.json, next to this file. The API key
 GEMINI_API_KEY environment variable. Nothing needs installing. Everything that happens goes into log.txt.
 """
 import argparse, base64, io, json, os, re, shutil, sys, time, wave
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -27,8 +27,19 @@ PACE = float(os.environ.get('GEN_PACE', '6.5'))      # seconds between requests:
 
 
 class ApiError(Exception):
-    def __init__(self, code, body):
-        super().__init__(f'HTTP {code}: {body[:300]}'); self.code = code; self.body = body
+    def __init__(self, code, body, daily=False):
+        super().__init__(f'HTTP {code}: {body[:300]}'); self.code = code; self.body = body; self.daily = daily
+
+def daily_note(body):
+    """Google's answer when the day's allowance is used up says how many a day and when to try again."""
+    lim = re.search(r'limit: (\d+) requests per day', body)
+    wait = re.search(r'retry in (?:(\d+)h)?(?:(\d+)m)?', body)
+    when = 'tomorrow'
+    if wait and (wait.group(1) or wait.group(2)):
+        t = datetime.now() + timedelta(hours=int(wait.group(1) or 0), minutes=int(wait.group(2) or 0) + 1)
+        when = t.strftime('%I:%M %p').lstrip('0').replace(' ', '').lower() + (' today' if t.date() == datetime.now().date() else ' tomorrow' if t.date() == datetime.now().date() + timedelta(days=1) else t.strftime(' on %A'))
+    return (f"Google's daily limit for the voices is used up ({lim.group(1) + ' a day' if lim else 'a set number a day'}). "
+            f"Nothing is lost: run this again after about {when}, and it will make only the ones still missing.")
 
 def log(msg):
     with (HERE / 'log.txt').open('a', encoding='utf-8') as f:
@@ -48,6 +59,9 @@ def call(path, body):
                 return json.loads(r.read() or b'{}')
         except HTTPError as e:
             text = e.read().decode('utf-8', 'replace')
+            if e.code == 429 and re.search(r'per day|per-day|daily', text, re.I):     # waiting a minute won't help
+                log(f'daily limit {e.code}: {text[:300]}')
+                raise ApiError(e.code, text, daily=True)
             if e.code in (429, 500, 502, 503, 504) and attempt < 4:
                 wait = 20 * (attempt + 1)
                 print(f'    busy ({e.code}), waiting {wait} s'); log(f'busy {e.code}: {text[:200]}')
@@ -145,13 +159,17 @@ def write_page(voice):
 def make(model, voice, ids):
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / 'voice.txt').write_text(voice + '\n', encoding='utf-8')
-    done = failed = 0
+    done = failed = 0; daily = False
     for n, i in enumerate(ids, 1):
         l = LINES[i]
         print(f'  [{n}/{len(ids)}] {l["text"]}')
         try:
             wav = speak(model, voice, l['text'], DATA['style'].get(l['kind']))
         except ApiError as e:
+            if e.daily:                                   # the rest would be refused too: stop here
+                failed += len(ids) - n + 1
+                print('\n' + daily_note(e.body)); log(f'stopped: daily limit, {len(ids) - n + 1} left')
+                daily = True; break
             print(f'    could not make it: {str(e)[:200]}'); failed += 1
             if e.code in (401, 403): sys.exit('The key was refused. Check GEMINI_API_KEY, then run this again.')
             continue
@@ -159,7 +177,7 @@ def make(model, voice, ids):
         with wave.open(str(OUT / f'{i}.wav')) as w: secs = w.getnframes() / w.getframerate()
         log(f'made {i} {secs:.2f}s ({l["text"]!r}, {voice})')
         if n < len(ids): time.sleep(PACE)
-    return done, failed
+    return done, failed, daily
 
 def main():
     ap = argparse.ArgumentParser()
@@ -187,8 +205,8 @@ def main():
     else:
         print(f'Making {len(ids)} clip(s) in the voice {voice}. About {len(ids) * (PACE + 2) / 60:.0f} minutes; leave this window open.')
         log(f'start: {len(ids)} clips, voice {voice}, model {a.model}')
-        done, failed = make(a.model, voice, ids)
-        print(f'\nMade {done}.' + (f' {failed} could not be made; run this again to retry them.' if failed else ''))
+        done, failed, daily = make(a.model, voice, ids)
+        print(f'\nMade {done}.' + (f' {failed} still to make, after the limit resets.' if daily else f' {failed} could not be made; run this again to retry them.' if failed else ''))
         log(f'end: made {done}, failed {failed}')
     write_page(voice)
     print('Wrote listen.html. Tell Claude when it is done, and Claude will put the clips in the games.')

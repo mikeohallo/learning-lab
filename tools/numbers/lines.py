@@ -20,6 +20,18 @@ LINES += [
     {'id': 'q_look', 'kind': 'prompt', 'text': 'Quick look!'},
     {'id': 'q_how_many', 'kind': 'prompt', 'text': 'How many did you see?'},
     {'id': 'q_again', 'kind': 'prompt', 'text': 'Have another look.'},
+    # Feed the monster
+    *[{'id': f'f_want_{i}', 'kind': 'prompt', 'text': f"This monster wants {w} {'cookie' if i == 1 else 'cookies'}."} for i, w in enumerate(WORDS[:10], 1)],
+    {'id': 'f_tap', 'kind': 'prompt', 'text': 'Tap the jar to put cookies on the plate.'},
+    {'id': 'f_more', 'kind': 'prompt', 'text': 'Still hungry! Put some more on.'},
+    {'id': 'f_less', 'kind': 'prompt', 'text': 'Oh no, too many! Take some away.'},
+    {'id': 'f_one_more', 'kind': 'prompt', 'text': 'This monster wants one more!'},
+    {'id': 'f_one_less', 'kind': 'prompt', 'text': 'This monster wants one less.'},
+    {'id': 'f_yum', 'kind': 'praise', 'text': 'Yum yum!'},
+    # More or less
+    {'id': 'm_more', 'kind': 'prompt', 'text': 'Which side has more?'},
+    {'id': 'm_fewer', 'kind': 'prompt', 'text': 'Which side has fewer?'},
+    {'id': 'm_count', 'kind': 'prompt', 'text': "Let's count them."},
     # all the games
     {'id': 'try_again', 'kind': 'prompt', 'text': 'Try again.'},
     {'id': 'p_yes', 'kind': 'praise', 'text': 'Yes!'},

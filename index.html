@@ -245,6 +245,73 @@ button { cursor: pointer; }
   background: radial-gradient(ellipse at 10% 100%, #7DBF55 0 58%, transparent 60%), radial-gradient(ellipse at 37% 100%, #8CCB5E 0 62%, transparent 64%), radial-gradient(ellipse at 64% 100%, #7DBF55 0 60%, transparent 62%), radial-gradient(ellipse at 90% 100%, #8CCB5E 0 58%, transparent 60%); }
 .qpeek { align-self: center; }
 @media (prefers-reduced-motion: reduce) { .cmon.pop img, .cmon.again, .cmon b.hint, .ntile.nope, .ntile.yes { animation: none; } .qmons, .cmon b { transition: none; }}
+/* Numbers: Feed the monster */
+.ck { display: block; border-radius: 50%; box-shadow: inset 0 -3px 0 rgba(120, 60, 20, .18), 0 2px 0 rgba(58, 40, 82, .14);
+  background: radial-gradient(circle at 30% 34%, #6B3E26 0 9%, transparent 10%), radial-gradient(circle at 67% 30%, #6B3E26 0 8%, transparent 9%),
+              radial-gradient(circle at 57% 67%, #6B3E26 0 9%, transparent 10%), radial-gradient(circle at 27% 70%, #6B3E26 0 7%, transparent 8%),
+              radial-gradient(circle at 45% 40%, #F2C784, #D99A4E 76%); }
+.gpic.feedpic { background: radial-gradient(circle at 80% 18%, #FFF1DE 0 18%, transparent 19%), #FFDDB5; }
+.gpic.feedpic img { position: absolute; left: 2px; top: 4px; width: 62px; height: 62px; object-fit: contain; }
+.gpic.feedpic .fpl { position: absolute; left: 30px; bottom: 7px; width: 62px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 rgba(58, 40, 82, .16); }
+.gpic.feedpic .ck { position: absolute; width: 20px; height: 20px; top: -4px; }
+.fscene { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 10px; padding: 8px 12px 8px 4px; border-radius: 18px; background: linear-gradient(#FFF3E3, #FFDDB5); }
+.fmon { justify-self: center; width: min(100%, 150px); aspect-ratio: 1; border: 0; padding: 0; background: none; }
+.fmon img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 0 rgba(58, 40, 82, .16)); }
+.fmon.chomp img { animation: chomp .3s ease 3; }
+.fmon.nope img { animation: shake2 .45s ease; }
+@keyframes chomp { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.1, .88); } 75% { transform: scale(.95, 1.06); } }
+.fbub { position: relative; justify-self: center; width: min(100%, 164px); border: 0; padding: 12px 10px 14px; border-radius: 30px; background: #fff; color: var(--ink);
+  box-shadow: 0 3px 0 rgba(58, 40, 82, .14); display: grid; justify-items: center; gap: 8px; }
+.fbub::before, .fbub::after { content: ''; position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 2px 0 rgba(58, 40, 82, .12); }
+.fbub::before { width: 18px; height: 18px; left: -13px; bottom: 18px; }
+.fbub::after { width: 10px; height: 10px; left: -25px; bottom: 8px; }
+.fbub b { font-family: var(--font-display); font-weight: 700; font-size: 56px; line-height: 1; }
+.fbub.tricky b { font-size: 46px; }
+.fdots { display: grid; grid-template-columns: repeat(5, 14px); gap: 5px; justify-content: center; }
+.fdots i { width: 14px; height: 14px; border-radius: 50%; background: #D99A4E; }
+.fbub.tricky .fdots { grid-template-columns: 34px; }
+.fbub.tricky .fdots .ck { width: 34px; height: 34px; }
+.fplate { --s: 52px; display: grid; grid-template-columns: repeat(5, var(--s)); gap: 8px; justify-content: center; margin-inline: auto; padding: 14px;
+  border-radius: 34px; background: #fff; border: 5px solid #EFE7F5; box-shadow: 0 4px 0 rgba(58, 40, 82, .12); }
+.fslot { position: relative; width: var(--s); height: var(--s); padding: 0; border-radius: 50%; border: 2px dashed #D9CDE6; background: none; }
+.fslot[disabled] { cursor: default; }
+.fslot .ck { position: absolute; inset: -2px; }
+.fslot.pop .ck { animation: plop .3s ease both; }
+@keyframes plop { 0% { transform: translateY(-44px) scale(.6); opacity: 0; } 70% { transform: translateY(2px) scale(1.06); opacity: 1; } 100% { transform: none; } }
+.fplate.eat .ck { transform: translate(var(--dx, 0), var(--dy, 0)) scale(.3); opacity: 0; transition: transform .42s ease-in, opacity .42s ease-in; }
+.frow { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; }
+.fjar { position: relative; width: 96px; height: 100px; border: 0; padding: 0; background: none; }
+.fjar .lid { position: absolute; left: 20px; right: 20px; top: 3px; height: 15px; border-radius: 7px; background: var(--pink); box-shadow: 0 2px 0 rgba(58, 40, 82, .2); }
+.fjar .glass { position: absolute; left: 9px; right: 9px; top: 15px; bottom: 3px; overflow: hidden; border-radius: 20px 20px 26px 26px; background: rgba(214, 236, 250, .75); border: 3px solid #A9D3EE; }
+.fjar .glass .ck { position: absolute; width: 32px; height: 32px; }
+.fjar.give { animation: jar .3s ease; }
+.fjar.nope { animation: shake2 .45s ease; }
+.fjar.hint .glass { animation: pulse .7s ease 3; }
+@keyframes jar { 40% { transform: scale(1.08, .94); } }
+.btn.ffeed { min-height: 64px; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+.ffeed svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+/* Numbers: More or less */
+.gpic.morepic { background: linear-gradient(90deg, #FFD3E4 0 49%, #fff 49% 51%, #CDE6F9 51%); }
+.gpic.morepic img { position: absolute; width: 27px; height: 27px; object-fit: contain; }
+.mq { justify-self: center; align-self: center; display: inline-flex; align-items: center; gap: 8px; border: 2px solid var(--line); background: var(--card); border-radius: 999px;
+  padding: 8px 18px 8px 12px; font-family: var(--font-display); font-weight: 600; font-size: 21px; color: var(--ink); }
+.mq svg { width: 24px; height: 24px; fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.mq svg .cone { fill: var(--ink); }
+.mcmp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding-bottom: 14px; }
+.mside { position: relative; padding: 0; border: 4px solid transparent; border-radius: 20px; background: var(--mat); touch-action: manipulation; }
+.mside.left { --mat: linear-gradient(#FFE7F0, #FFD3E4); }
+.mside.right { --mat: linear-gradient(#E6F3FD, #CDE6F9); }
+.mside.yes { border-color: var(--green); animation: bounce .5s ease both; }
+.mside.nope { animation: shake2 .45s ease; }
+.mmon { position: absolute; width: var(--m); height: var(--m); margin: calc(var(--m) / -2) 0 0 calc(var(--m) / -2); pointer-events: none; }
+.mmon img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 0 rgba(58, 40, 82, .16)); }
+.mmon b { position: absolute; right: -5px; top: -5px; min-width: max(18px, calc(var(--m) * .46)); height: max(18px, calc(var(--m) * .46)); padding: 0 3px; border-radius: 999px; background: var(--ink); color: #fff;
+  font: 700 max(12px, calc(var(--m) * .32))/max(18px, calc(var(--m) * .46)) var(--font-display); text-align: center; box-shadow: 0 0 0 2px #fff; scale: 0; transition: scale .2s; }
+.mmon.done b { scale: 1; }
+.mtot { position: absolute; left: 50%; bottom: -22px; translate: -50% 0; z-index: 2; min-width: 48px; height: 48px; padding: 0 8px; border-radius: 999px; background: var(--ink); color: #fff;
+  font: 700 28px/48px var(--font-display); text-align: center; box-shadow: 0 0 0 3px #fff; scale: 0; transition: scale .25s; }
+.mside.shown .mtot { scale: 1; }
+@media (prefers-reduced-motion: reduce) { .fmon.chomp img, .fmon.nope img, .fslot.pop .ck, .fjar.give, .fjar.nope, .fjar.hint .glass, .mside.yes, .mside.nope { animation: none; } .fplate.eat .ck, .mmon b, .mtot { transition: none; }}
 </style>
 </head>
 <body>
@@ -267,6 +334,12 @@ button { cursor: pointer; }
       <button class="gametile" id="playQuick" type="button">
         <span class="gpic quickpic" aria-hidden="true"><span class="die"><img src="faces/F04.webp" alt="" style="left:6px;top:6px"><img src="faces/F04.webp" alt="" style="left:39px;top:6px"><img src="faces/F04.webp" alt="" style="left:6px;top:39px"><img src="faces/F04.webp" alt="" style="left:39px;top:39px"></span></span>
         <span><b>Quick look</b><small>How many did you see?</small></span></button>
+      <button class="gametile" id="playFeed" type="button">
+        <span class="gpic feedpic" aria-hidden="true"><img src="faces/F24.webp" alt=""><span class="fpl"><span class="ck" style="left:6px"></span><span class="ck" style="left:21px;top:-9px"></span><span class="ck" style="left:36px"></span></span></span>
+        <span><b>Feed the monster</b><small>Give it just the right number</small></span></button>
+      <button class="gametile" id="playMore" type="button">
+        <span class="gpic morepic" aria-hidden="true"><img src="faces/F10.webp" alt="" style="left:10px;top:20px"><img src="faces/F10.webp" alt="" style="left:12px;top:54px"><img src="faces/F04.webp" alt="" style="left:52px;top:8px"><img src="faces/F04.webp" alt="" style="left:64px;top:33px"><img src="faces/F04.webp" alt="" style="left:51px;top:56px"><img src="faces/F04.webp" alt="" style="left:66px;top:63px"></span>
+        <span><b>More or less</b><small>Which side has more?</small></span></button>
     </div>
   </section>
 
@@ -353,13 +426,57 @@ button { cursor: pointer; }
     </div>
   </section>
 
+  <section id="feedgame" class="stack" hidden aria-label="Feed the monster">
+    <div class="gamebar"><button class="back" type="button" data-go="home"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>All games</button><button class="mute" type="button"></button></div>
+    <div class="panel npanel">
+      <h2 class="h2">Feed the monster</h2>
+      <div class="levels three" id="fLevels" role="group" aria-label="How hard"></div>
+      <div class="lsay" id="fSay" aria-live="polite"></div>
+      <div class="fscene" id="fScene">
+        <button class="fmon" id="fMon" type="button" aria-label="Hear it again"><img id="fFace" alt=""></button>
+        <button class="fbub" id="fBub" type="button"><b id="fNum"></b><span class="fdots" id="fDots"></span></button>
+      </div>
+      <div class="fplate" id="fPlate" role="group" aria-label="The plate"></div>
+      <div class="frow" id="fRow">
+        <button class="fjar" id="fJar" type="button" aria-label="Take a cookie from the jar"><span class="lid"></span><span class="glass"><span class="ck" style="left:6px;top:36px"></span><span class="ck" style="left:34px;top:42px"></span><span class="ck" style="left:18px;top:14px"></span><span class="ck" style="left:44px;top:12px"></span></span></button>
+        <button class="btn primary ffeed" id="fFeed" type="button"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><circle cx="11" cy="12.5" r="1.4" fill="currentColor"/><circle cx="21" cy="12.5" r="1.4" fill="currentColor"/><path d="M9.5 18.5c3.6 4.6 9.4 4.6 13 0"/></svg>Feed</button>
+      </div>
+      <div class="wdots" id="fProg" aria-hidden="true"></div>
+      <div class="hend" id="fEnd" hidden>
+        <div class="nword" id="fEndWord">Happy monsters!</div>
+        <div class="wdots" id="fEndDots" aria-hidden="true"></div>
+        <button class="btn primary" id="fAgain" type="button">Play again</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="moregame" class="stack" hidden aria-label="More or less">
+    <div class="gamebar"><button class="back" type="button" data-go="home"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>All games</button><button class="mute" type="button"></button></div>
+    <div class="panel npanel">
+      <h2 class="h2">More or less</h2>
+      <div class="levels three" id="mLevels" role="group" aria-label="How hard"></div>
+      <div class="lsay" id="mSay" aria-live="polite"></div>
+      <button class="mq" id="mQ" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="cone" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/></svg><span id="mQText"></span></button>
+      <div class="mcmp" id="mCmp">
+        <button class="mside left" id="mL" type="button"></button>
+        <button class="mside right" id="mR" type="button"></button>
+      </div>
+      <div class="wdots" id="mProg" aria-hidden="true"></div>
+      <div class="hend" id="mEnd" hidden>
+        <div class="nword" id="mEndWord">Well done!</div>
+        <div class="wdots" id="mEndDots" aria-hidden="true"></div>
+        <button class="btn primary" id="mAgain" type="button">Play again</button>
+      </div>
+    </div>
+  </section>
+
   <p class="more"><a id="morePlay" href="https://play.mikeohalloran.au/">More to play<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a></p>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
 <script>
 // ---------------------------------------------------------------- data ----
-// The Learning Lab: Letters (tracing, spelling, letter sounds) and Numbers (counting games), with the monsters from
+// The Learning Lab: Letters (tracing, spelling, letter sounds) and Numbers (counting and comparing games), with the monsters from
 // Sam's Monster Book as the characters. It used to be part of monsters.mikeohalloran.au.
 const DEFAULT_OWNER = '';   // gift copies: change this, or link with ?for=Name
 // The hosted build sets this to true: then the Letters game only shows on a device that has opened the secret
@@ -453,13 +570,13 @@ function renderTitle() {
 }
 
 // ------------------------------------------------------------- screens ---
-const screens = ['home', 'lettergame', 'countgame', 'quickgame'];
-const HASHES = { home: '', lettergame: '#letters', countgame: '#count', quickgame: '#quick' };
+const screens = ['home', 'lettergame', 'countgame', 'quickgame', 'feedgame', 'moregame'];
+const HASHES = { home: '', lettergame: '#letters', countgame: '#count', quickgame: '#quick', feedgame: '#feed', moregame: '#more' };
 function show(id) {
   if (id !== 'lettergame') stopLetters();
   stopNumbers();
   screens.forEach(s => { $(s).hidden = s !== id; });
-  try {   // keep the address in step, so #letters, #count or #quick can be bookmarked or saved to a home screen
+  try {   // keep the address in step, so each game (#letters, #count, #quick, #feed, #more) can be bookmarked or saved to a home screen
     const h = HASHES[id] || '';
     if (location.hash !== h) history.replaceState(null, '', location.pathname + location.search + h);
   } catch (e) {}
@@ -469,6 +586,8 @@ function openGame(id) {
   if (id === 'lettergame') { if (lettersOK()) openLetters(); else show('home'); }
   else if (id === 'countgame') openCount();
   else if (id === 'quickgame') openQuick();
+  else if (id === 'feedgame') openFeed();
+  else if (id === 'moregame') openMore();
   else show('home');
 }
 function route() {
@@ -578,6 +697,7 @@ const sound = (() => {
     giggle() { [0, .1, .2, .3].forEach((at, i) => tone({ f0: 700 + i * 60, f1: 900 + i * 60, dur: .08, vol: .07, at: .45 + at })); },
     whoosh() { hiss({ dur: .6, f0: 300, f1: 1800, q: .6, vol: .08, attack: .15 }); [659.25, 880, 1318.5].forEach((f, i) => tone({ f0: f, dur: .5, vol: .05, at: .35 + i * .08 })); },
     chime() { [784, 1046.5, 1318.5].forEach((f, i) => tone({ f0: f, dur: .35, vol: .06, at: i * .07 })); },
+    munch() { [0, .2, .4].forEach(at => { hiss({ dur: .09, kind: 'lowpass', f0: 1300, f1: 500, vol: .14, at, attack: .004 }); tone({ f0: 150, f1: 90, dur: .08, type: 'triangle', vol: .08, at }); }); },
     out() { const c = ac(); return c ? { ctx: c, master } : null; },   // for the recorded voices in Letters
   };
 })();
@@ -595,7 +715,7 @@ function syncMute() {
 // The maths games. One narrator, made with text-to-speech (numbers/number_voices.py) and played through the game's
 // own audio so the mute button covers it. A clip that isn't made yet is said by the browser's own voice if it has
 // one, otherwise shown as words. numbers/voices/index.json lists the clips there are.
-const NUM_LINES = /*NUM_LINES*/{"n_1":"one","n_2":"two","n_3":"three","n_4":"four","n_5":"five","n_6":"six","n_7":"seven","n_8":"eight","n_9":"nine","n_10":"ten","n_11":"eleven","n_12":"twelve","n_13":"thirteen","n_14":"fourteen","n_15":"fifteen","n_16":"sixteen","n_17":"seventeen","n_18":"eighteen","n_19":"nineteen","n_20":"twenty","c_start":"Let's count the monsters! Tap each one.","c_how_many":"How many monsters?","c_already":"We counted that one!","q_look":"Quick look!","q_how_many":"How many did you see?","q_again":"Have another look.","try_again":"Try again.","p_yes":"Yes!","p_right":"That's right!","p_great_counting":"Great counting!","p_sharp":"Super sharp eyes!","p_well_done":"Well done!"}/*/NUM_LINES*/;
+const NUM_LINES = /*NUM_LINES*/{"n_1":"one","n_2":"two","n_3":"three","n_4":"four","n_5":"five","n_6":"six","n_7":"seven","n_8":"eight","n_9":"nine","n_10":"ten","n_11":"eleven","n_12":"twelve","n_13":"thirteen","n_14":"fourteen","n_15":"fifteen","n_16":"sixteen","n_17":"seventeen","n_18":"eighteen","n_19":"nineteen","n_20":"twenty","c_start":"Let's count the monsters! Tap each one.","c_how_many":"How many monsters?","c_already":"We counted that one!","q_look":"Quick look!","q_how_many":"How many did you see?","q_again":"Have another look.","f_want_1":"This monster wants one cookie.","f_want_2":"This monster wants two cookies.","f_want_3":"This monster wants three cookies.","f_want_4":"This monster wants four cookies.","f_want_5":"This monster wants five cookies.","f_want_6":"This monster wants six cookies.","f_want_7":"This monster wants seven cookies.","f_want_8":"This monster wants eight cookies.","f_want_9":"This monster wants nine cookies.","f_want_10":"This monster wants ten cookies.","f_tap":"Tap the jar to put cookies on the plate.","f_more":"Still hungry! Put some more on.","f_less":"Oh no, too many! Take some away.","f_one_more":"This monster wants one more!","f_one_less":"This monster wants one less.","f_yum":"Yum yum!","m_more":"Which side has more?","m_fewer":"Which side has fewer?","m_count":"Let's count them.","try_again":"Try again.","p_yes":"Yes!","p_right":"That's right!","p_great_counting":"Great counting!","p_sharp":"Super sharp eyes!","p_well_done":"Well done!"}/*/NUM_LINES*/;
 const NUM = n => 'n_' + n;
 const nstore = (() => { try { return JSON.parse(localStorage.getItem('learning-lab.numbers')) || {}; } catch (e) { return {}; } })();
 function nsave() { try { localStorage.setItem('learning-lab.numbers', JSON.stringify(nstore)); } catch (e) {} }
@@ -963,13 +1083,261 @@ async function openQuick() {
   if (!$('quickgame').hidden) newQuickRound();
 }
 
+// ---- Feed the monster: put just the right number of cookies on its plate
+const FD = { level: '1', round: 0, n: 0, res: [], queue: [], want: 0, start: 0, dir: 0, k: 0, tries: 0, busy: false, face: 0, told: false };
+const FD_ROUND = 5, FD_MAX = 10;
+const FD_LEVELS = [{ key: '1', name: 'Easy', sub: 'up to 5', lo: 1, hi: 5 }, { key: '2', name: 'Medium', sub: 'up to 10', lo: 3, hi: 10 },
+                   { key: '3', name: 'Tricky', sub: '1 more, 1 less' }];
+const fdLevel = () => FD_LEVELS.find(l => l.key === FD.level) || FD_LEVELS[0];
+function cookie() { const c = document.createElement('span'); c.className = 'ck'; return c; }
+function feedQueue(L) {
+  if (L.key !== '3') {
+    const span = []; for (let v = L.lo; v <= L.hi; v++) span.push(v);
+    return shuffleArr(span).slice(0, FD_ROUND).map(v => ({ want: v, start: 0, dir: 0 }));
+  }
+  // Tricky: the plate already has some on it, and the monster wants one more or one less
+  let last = 0;
+  return shuffleArr([1, 1, -1, -1, Math.random() < .5 ? 1 : -1]).map(dir => {
+    let st; do { st = 2 + Math.floor(Math.random() * 8); } while (st === last); last = st;
+    return { want: st + dir, start: st, dir };
+  });
+}
+const feedAsk = () => FD.dir > 0 ? 'f_one_more' : FD.dir < 0 ? 'f_one_less' : 'f_want_' + FD.want;
+function buildPlate() {
+  const box = $('fPlate'); if (box.children.length) return;
+  for (let i = 0; i < FD_MAX; i++) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'fslot';
+    b.addEventListener('click', () => feedTake(i)); box.append(b);
+  }
+}
+function sizePlate() {               // a ten frame on a plate: two rows of five
+  const box = $('fPlate'), avail = Math.max(240, box.parentElement.clientWidth - 32);
+  box.style.setProperty('--s', Math.max(38, Math.min(56, Math.floor((avail - 70) / 5))) + 'px');
+}
+function drawPlate() {
+  [...$('fPlate').children].forEach((sl, i) => {
+    const has = i < FD.k;
+    if (has && !sl.querySelector('.ck')) sl.append(cookie());
+    if (!has) { sl.textContent = ''; sl.classList.remove('pop'); }
+    sl.disabled = !has;
+    sl.setAttribute('aria-label', has ? `Cookie ${i + 1}. Tap to take it off` : 'Empty');
+  });
+  $('fPlate').setAttribute('aria-label', `The plate: ${FD.k} ${FD.k === 1 ? 'cookie' : 'cookies'}`);
+}
+function drawBubble() {
+  const b = $('fBub'), dots = $('fDots'); dots.textContent = '';
+  if (FD.dir) {
+    $('fNum').textContent = FD.dir > 0 ? '+1' : '\u22121'; b.classList.add('tricky'); dots.append(cookie());
+    b.setAttribute('aria-label', (FD.dir > 0 ? 'One more' : 'One less') + '. Tap to hear it again');
+  } else {
+    $('fNum').textContent = FD.want; b.classList.remove('tricky');
+    for (let i = 0; i < FD.want; i++) dots.append(document.createElement('i'));
+    b.setAttribute('aria-label', `${FD.want} ${FD.want === 1 ? 'cookie' : 'cookies'}. Tap to hear it again`);
+  }
+}
+function newFeedRound() {
+  FD.n = 0; FD.res = []; FD.queue = feedQueue(fdLevel());
+  $('fEnd').hidden = true; ['fScene', 'fPlate', 'fRow', 'fProg'].forEach(id => { $(id).hidden = false; });
+  drawNDots('fProg', FD); feedNext();
+}
+function feedNext() {
+  nvoice.stop();
+  const my = ++FD.round; FD.busy = false; FD.tries = 0;
+  if (FD.n >= FD.queue.length) return feedEnd();
+  Object.assign(FD, FD.queue[FD.n]); FD.k = FD.start;
+  let f; do { f = 1 + Math.floor(Math.random() * N); } while (f === FD.face && N > 1); FD.face = f;
+  $('fFace').src = `faces/F${pad(f)}.webp`;
+  const plate = $('fPlate'); plate.classList.remove('eat'); [...plate.children].forEach(sl => { sl.textContent = ''; sl.classList.remove('pop'); });
+  sizePlate(); drawPlate(); drawBubble();
+  nvoice.preload([feedAsk(), 'f_tap', 'f_more', 'f_less', 'f_yum', ...[...Array(FD_MAX).keys()].map(i => NUM(i + 1))]);
+  lwait(FD.n === 0 ? 350 : 250).then(() => my === FD.round && FD.k === FD.start && feedPrompt(!FD.told && !FD.dir));
+}
+function feedPrompt(first) {
+  const ids = [feedAsk()];
+  if (first) { ids.push('f_tap'); FD.told = true; }
+  return nvoice.say(ids);
+}
+function feedJar() {
+  if (FD.busy) return;
+  sound.unlock();
+  const jar = $('fJar');
+  if (FD.k >= FD_MAX) { jar.classList.remove('nope'); void jar.offsetWidth; jar.classList.add('nope'); return; }   // the plate is full
+  FD.k++; drawPlate();
+  const sl = $('fPlate').children[FD.k - 1]; sl.classList.remove('pop'); void sl.offsetWidth; sl.classList.add('pop');
+  jar.classList.remove('give', 'hint'); void jar.offsetWidth; jar.classList.add('give');
+  sound.pop(); nvoice.say([NUM(FD.k)]);           // counting along: and on Tricky, counting on from what's there
+}
+function feedTake(i) {
+  if (FD.busy || i >= FD.k) return;
+  sound.unlock();
+  FD.k--; drawPlate(); sound.fwip();
+  if (FD.k) nvoice.say([NUM(FD.k)]); else nvoice.stop();
+}
+function feedIt() {
+  if (FD.busy) return;
+  sound.unlock();
+  const my = FD.round, mon = $('fMon');
+  if (FD.k === 0) {                                // nothing on the plate yet: show her the jar
+    const jar = $('fJar'); jar.classList.remove('hint'); void jar.offsetWidth; jar.classList.add('hint');
+    nvoice.say(['f_tap']); return;
+  }
+  if (FD.k !== FD.want) {
+    FD.tries++; mon.classList.remove('nope', 'chomp'); void mon.offsetWidth; mon.classList.add('nope'); sound.grr();
+    nvoice.say([FD.k < FD.want ? 'f_more' : 'f_less']); return;
+  }
+  FD.busy = true; FD.res[FD.n] = FD.tries ? 'miss' : 'hit'; drawNDots('fProg', FD);
+  const plate = $('fPlate'), m = $('fFace').getBoundingClientRect(), mx = m.left + m.width / 2, my2 = m.top + m.height * .6;
+  [...plate.querySelectorAll('.ck')].forEach((c, i) => {          // the cookies go to the monster
+    const r = c.getBoundingClientRect();
+    c.style.setProperty('--dx', Math.round(mx - r.left - r.width / 2) + 'px'); c.style.setProperty('--dy', Math.round(my2 - r.top - r.height / 2) + 'px');
+    c.style.transitionDelay = (i * 45) + 'ms';
+  });
+  plate.classList.add('eat');
+  lwait(reduced ? 30 : 360 + FD.k * 45).then(() => {
+    if (my !== FD.round) return;
+    mon.classList.remove('chomp', 'nope'); void mon.offsetWidth; mon.classList.add('chomp'); sound.munch();
+  });
+  nvoice.say(['f_yum', NUM(FD.want)]).then(() => {
+    if (my !== FD.round) return;
+    lwait(500).then(() => { if (my === FD.round) { FD.n++; feedNext(); } });
+  });
+}
+function feedEnd() {
+  FD.busy = true; $('fSay').classList.remove('show');
+  ['fScene', 'fPlate', 'fRow', 'fProg'].forEach(id => { $(id).hidden = true; });
+  const hits = FD.res.filter(r => r === 'hit').length;
+  $('fEndWord').textContent = hits === FD.queue.length ? 'All first go!' : 'Happy monsters!';
+  drawNDots('fEndDots', FD); $('fEnd').hidden = false;
+  sound.jingle(); nvoice.say(['p_well_done'], 120, false);
+}
+function feedLevel(key) {
+  FD.level = key; nstore.feed = key; nsave();
+  buildNLevels('fLevels', FD_LEVELS, FD.level, feedLevel); newFeedRound();
+}
+async function openFeed() {
+  show('feedgame'); nvoice.target($('fSay')); buildPlate();
+  FD.level = FD_LEVELS.some(l => l.key === nstore.feed) ? nstore.feed : '1';
+  buildNLevels('fLevels', FD_LEVELS, FD.level, feedLevel);
+  await nvoice.load();
+  if (!$('feedgame').hidden) newFeedRound();
+}
+
+// ---- More or less: two groups of monsters; which side has more (or, on Tricky, fewer)?
+const MR = { level: '1', round: 0, n: 0, res: [], queue: [], a: 0, b: 0, ask: 'more', tries: 0, busy: false };
+const MR_ROUND = 6;
+const MR_LEVELS = [{ key: '1', name: 'Easy', sub: 'up to 5' }, { key: '2', name: 'Medium', sub: 'up to 10' }, { key: '3', name: 'Tricky', sub: 'close ones' }];
+const mrLevel = () => MR_LEVELS.find(l => l.key === MR.level) || MR_LEVELS[0];
+const mrAsk = () => MR.ask === 'more' ? 'm_more' : 'm_fewer';
+function moreQueue(L) {
+  const pairs = [];
+  if (L.key === '1') { for (let x = 1; x <= 5; x++) for (let y = x + 2; y <= 5; y++) pairs.push([x, y]); }            // a big difference
+  else if (L.key === '2') { for (let x = 2; x <= 10; x++) for (let y = x + 2; y <= 10; y++) pairs.push([x, y]); }
+  else { for (let x = 3; x <= 9; x++) for (let y = x + 1; y <= Math.min(10, x + 2); y++) pairs.push([x, y]); }       // only one or two apart
+  const asks = L.key === '3' ? shuffleArr(['more', 'more', 'more', 'fewer', 'fewer', 'fewer']) : Array(MR_ROUND).fill('more');
+  return shuffleArr(pairs).slice(0, MR_ROUND).map(([x, y], i) => Math.random() < .5 ? { a: x, b: y, ask: asks[i] } : { a: y, b: x, ask: asks[i] });
+}
+function placeMore() {
+  const sides = [$('mL'), $('mR')], counts = [MR.a, MR.b], PAD = 9;
+  const W = sides[0].clientWidth || 140, H = Math.round(Math.min(360, Math.max(210, W * 1.45)));
+  const lays = counts.map(n => countLayout(n, W - 2 * PAD, H - 2 * PAD));
+  // Easy: every monster the same size, so more looks like more. Medium and Tricky: each side's monsters fill their
+  // side, so the side with fewer has bigger ones and she has to count, not judge by how full a side looks.
+  if (MR.level === '1') { const m = Math.min(lays[0].m, lays[1].m); lays.forEach(l => { l.m = m; }); }
+  const faces = faceSet(2);
+  sides.forEach((s, si) => {
+    s.textContent = ''; s.classList.remove('yes', 'nope', 'shown'); s.style.height = H + 'px'; s.style.setProperty('--m', lays[si].m + 'px');
+    lays[si].spots.forEach(([x, y]) => {
+      const d = document.createElement('span'); d.className = 'mmon';
+      d.style.left = ((x + PAD) / W * 100).toFixed(2) + '%'; d.style.top = ((y + PAD) / H * 100).toFixed(2) + '%';
+      const im = new Image(); im.alt = ''; im.src = `faces/F${pad(faces[si])}.webp`; im.draggable = false;
+      d.append(im, document.createElement('b')); s.append(d);
+    });
+    const t = document.createElement('span'); t.className = 'mtot'; t.textContent = counts[si]; s.append(t);
+    s.setAttribute('aria-label', `${si ? 'Right' : 'Left'} side: ${counts[si]} ${counts[si] === 1 ? 'monster' : 'monsters'}`);
+  });
+}
+function newMoreRound() {
+  MR.n = 0; MR.res = []; MR.queue = moreQueue(mrLevel());
+  $('mEnd').hidden = true; ['mQ', 'mCmp', 'mProg'].forEach(id => { $(id).hidden = false; });
+  drawNDots('mProg', MR); moreNext();
+}
+function moreNext() {
+  nvoice.stop();
+  const my = ++MR.round; MR.busy = false; MR.tries = 0;
+  if (MR.n >= MR.queue.length) return moreEnd();
+  Object.assign(MR, MR.queue[MR.n]);
+  $('mQText').textContent = NUM_LINES[mrAsk()];
+  placeMore();
+  nvoice.preload([mrAsk(), 'm_count', 'p_right', 'p_yes', ...[...Array(10).keys()].map(i => NUM(i + 1))]);
+  lwait(400).then(() => my === MR.round && !MR.busy && nvoice.say([mrAsk()], 120, false));   // the question is on screen already
+}
+function moreTap(si) {
+  if (MR.busy) return;
+  sound.unlock();
+  const my = MR.round, s = si ? $('mR') : $('mL'), mine = si ? MR.b : MR.a, other = si ? MR.a : MR.b;
+  if (MR.ask === 'more' ? mine > other : mine < other) {
+    MR.busy = true; s.classList.add('yes'); sound.chime();
+    $('mL').classList.add('shown'); $('mR').classList.add('shown');          // and how many each side has
+    MR.res[MR.n] = MR.tries ? 'miss' : 'hit'; drawNDots('mProg', MR);
+    nvoice.say([praise()]).then(() => {
+      if (my !== MR.round) return;
+      lwait(900).then(() => { if (my === MR.round) { MR.n++; moreNext(); } });
+    });
+  } else {
+    MR.tries++; MR.busy = true; s.classList.remove('nope'); void s.offsetWidth; s.classList.add('nope');
+    moreCount(my).then(ok => { if (!ok || my !== MR.round) return; MR.busy = false; nvoice.say([mrAsk()], 120, false); });
+  }
+}
+async function moreCount(my) {       // "Let's count them": a number on each monster, one side and then the other
+  if (!await nvoice.say(['m_count'])) return false;
+  for (const s of [$('mL'), $('mR')]) {
+    const mons = [...s.querySelectorAll('.mmon')];
+    for (let i = 0; i < mons.length; i++) {
+      if (my !== MR.round) return false;
+      if (!mons[i].classList.contains('done')) { mons[i].classList.add('done'); mons[i].lastChild.textContent = i + 1; sound.pop(); }
+      if (!await nvoice.say([NUM(i + 1)], 60)) return false;
+    }
+    s.classList.add('shown');
+    await lwait(350);
+  }
+  return my === MR.round;
+}
+function moreEnd() {
+  MR.busy = true; $('mSay').classList.remove('show');
+  ['mQ', 'mCmp', 'mProg'].forEach(id => { $(id).hidden = true; });
+  const hits = MR.res.filter(r => r === 'hit').length;
+  $('mEndWord').textContent = hits === MR.queue.length ? 'All first go!' : 'Well done!';
+  drawNDots('mEndDots', MR); $('mEnd').hidden = false;
+  sound.jingle(); nvoice.say(['p_well_done'], 120, false);
+}
+function moreLevel(key) {
+  MR.level = key; nstore.more = key; nsave();
+  buildNLevels('mLevels', MR_LEVELS, MR.level, moreLevel); newMoreRound();
+}
+async function openMore() {
+  show('moregame'); nvoice.target($('mSay'));
+  MR.level = MR_LEVELS.some(l => l.key === nstore.more) ? nstore.more : '1';
+  buildNLevels('mLevels', MR_LEVELS, MR.level, moreLevel);
+  await nvoice.load();
+  if (!$('moregame').hidden) newMoreRound();
+}
+
 function stopNumbers() {
   nvoice.stop(); NC.round++; NC.busy = false; NQ.round++; NQ.busy = false; clearTimeout(NQ.timer);
+  FD.round++; FD.busy = false; MR.round++; MR.busy = false;
 }
 function buildNumbers() {
   $('cAgain').addEventListener('click', () => { sound.unlock(); newCountRound(); });
   $('qAgain').addEventListener('click', () => { sound.unlock(); newQuickRound(); });
   $('qPeek').addEventListener('click', quickPeek);
+  $('fJar').addEventListener('click', feedJar);
+  $('fFeed').addEventListener('click', feedIt);
+  [$('fMon'), $('fBub')].forEach(b => b.addEventListener('click', () => { sound.unlock(); if (!FD.busy) feedPrompt(false); }));
+  $('fAgain').addEventListener('click', () => { sound.unlock(); newFeedRound(); });
+  $('mL').addEventListener('click', () => moreTap(0));
+  $('mR').addEventListener('click', () => moreTap(1));
+  $('mQ').addEventListener('click', () => { sound.unlock(); if (!MR.busy) nvoice.say([mrAsk()], 120, false); });
+  $('mAgain').addEventListener('click', () => { sound.unlock(); newMoreRound(); });
 }
 
 // ------------------------------------------------------------- letters ----
@@ -1499,6 +1867,8 @@ function init() {
   $('playLetters').addEventListener('click', () => openGame('lettergame'));
   $('playCount').addEventListener('click', () => openGame('countgame'));
   $('playQuick').addEventListener('click', () => openGame('quickgame'));
+  $('playFeed').addEventListener('click', () => openGame('feedgame'));
+  $('playMore').addEventListener('click', () => openGame('moregame'));
   buildLetters();
   buildNumbers();
   if (!lettersOK()) { $('playLetters').hidden = true; $('lettersHead').hidden = true; }

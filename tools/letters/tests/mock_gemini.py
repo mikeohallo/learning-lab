@@ -40,6 +40,8 @@ class H(BaseHTTPRequestHandler):
             if MODE == 'busy' and not state['busy_done']:
                 state['busy_done'] = True; return self.send(503, {'error': {'message': 'overloaded'}})
             if MODE == 'denied': return self.send(403, {'error': {'message': 'API key not valid'}})
+            if MODE == 'daily' and state['tts'] > 2:     # the day's allowance runs out after two
+                return self.send(429, {'error': {'message': 'Rate limit exceeded for model gemini-3.8-flash-tts (limit: 100 requests per day on Tier 1). Please retry in 19h30m24s or upgrade your tier at https://ai.dev/rate-limit.', 'code': 'too_many_requests'}})
             vid = body['generation_config']['speech_config'][0]['voice']
             secs = 0.25 + 0.05 * len(c['text'])
             if state['tts'] % 5 == 0:   # some raw PCM, SDK-like shape
