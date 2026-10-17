@@ -1,5 +1,7 @@
 # Working on the Learning Lab
 
+Portfolio rules: v1 (the project's rules for every build; this file carries the ones that apply here).
+
 ## Deploys: only the commit Mike names
 
 learn.mikeohalloran.au is the Cloudflare Pages project `learning-lab`, deployed by Direct Upload. Nothing deploys it from GitHub, and it stays that way: never connect it to Pages Git integration, Workers Builds, GitHub Actions or an API token.
