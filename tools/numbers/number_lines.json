@@ -233,6 +233,111 @@
    "text": "Let's count them."
   },
   {
+   "id": "t_next",
+   "kind": "prompt",
+   "text": "What comes next?"
+  },
+  {
+   "id": "t_missing",
+   "kind": "prompt",
+   "text": "Which number is missing?"
+  },
+  {
+   "id": "t_before",
+   "kind": "prompt",
+   "text": "What comes before?"
+  },
+  {
+   "id": "t_down",
+   "kind": "prompt",
+   "text": "Counting down!"
+  },
+  {
+   "id": "t_count",
+   "kind": "prompt",
+   "text": "Let's count along."
+  },
+  {
+   "id": "j_bed_1",
+   "kind": "prompt",
+   "text": "One monster on the bed."
+  },
+  {
+   "id": "j_bed_2",
+   "kind": "prompt",
+   "text": "Two monsters on the bed."
+  },
+  {
+   "id": "j_bed_3",
+   "kind": "prompt",
+   "text": "Three monsters on the bed."
+  },
+  {
+   "id": "j_bed_4",
+   "kind": "prompt",
+   "text": "Four monsters on the bed."
+  },
+  {
+   "id": "j_bed_5",
+   "kind": "prompt",
+   "text": "Five monsters on the bed."
+  },
+  {
+   "id": "j_bed_6",
+   "kind": "prompt",
+   "text": "Six monsters on the bed."
+  },
+  {
+   "id": "j_bed_7",
+   "kind": "prompt",
+   "text": "Seven monsters on the bed."
+  },
+  {
+   "id": "j_bed_8",
+   "kind": "prompt",
+   "text": "Eight monsters on the bed."
+  },
+  {
+   "id": "j_bed_9",
+   "kind": "prompt",
+   "text": "Nine monsters on the bed."
+  },
+  {
+   "id": "j_bed_10",
+   "kind": "prompt",
+   "text": "Ten monsters on the bed."
+  },
+  {
+   "id": "j_on_1",
+   "kind": "prompt",
+   "text": "One more jumps on!"
+  },
+  {
+   "id": "j_on_2",
+   "kind": "prompt",
+   "text": "Two more jump on!"
+  },
+  {
+   "id": "j_on_3",
+   "kind": "prompt",
+   "text": "Three more jump on!"
+  },
+  {
+   "id": "j_off_1",
+   "kind": "prompt",
+   "text": "Oops! One rolls off!"
+  },
+  {
+   "id": "j_off_2",
+   "kind": "prompt",
+   "text": "Oops! Two roll off!"
+  },
+  {
+   "id": "j_how_many",
+   "kind": "prompt",
+   "text": "How many on the bed now?"
+  },
+  {
    "id": "try_again",
    "kind": "prompt",
    "text": "Try again."

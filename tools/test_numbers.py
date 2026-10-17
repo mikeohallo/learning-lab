@@ -1,4 +1,4 @@
-"""Play Monster count, Quick look, Feed the monster and More or less at phone, folding-phone and laptop sizes, check the narrator's three paths
+"""Play Monster count, Quick look, Feed the monster, More or less, Monster train and Jump in the bed at phone, folding-phone and laptop sizes, check the narrator's three paths
 (recorded clips, the browser's own voice, words only when muted), and run the voice maker against a fake API.
     python3 tools/test_numbers.py OUTDIR"""
 import http.server, socketserver, sys, threading, functools, json, re, subprocess, tempfile, time, os
@@ -77,8 +77,10 @@ with sync_playwright() as pw:
     m = re.search(r'/\*NUM_LINES\*/(.*?)/\*/NUM_LINES\*/', src, re.S)
     page_lines = json.loads(m.group(1)) if m else {}
     js = src[src.index('// ------------------------------------------------------------- numbers ---'):src.index('function buildNumbers()')]
-    used = set(re.findall(r"'((?:c|q|p|f|m)_[a-z_]+|try_again)'", js)) - {'f_want_'}
-    check(f'every line the games say is in the list ({len(used)} lines used, {len(page_lines)} in the page)', used <= set(page_lines) and len(page_lines) >= 51)
+    used = set(re.findall(r"'((?:c|q|p|f|m|t|j)_[a-z_]+|try_again)'", js)) - {'f_want_', 'j_bed_', 'j_on_', 'j_off_'}
+    check(f'every line the games say is in the list ({len(used)} lines used, {len(page_lines)} in the page)', used <= set(page_lines) and len(page_lines) >= 72)
+    check('Jump in the bed has a line for one to ten on the bed, and for one to three jumping on and one or two rolling off',
+          all(f'j_bed_{i}' in page_lines for i in range(1, 11)) and page_lines['j_bed_1'] == 'One monster on the bed.' and all(f'j_on_{i}' in page_lines for i in (1, 2, 3)) and all(f'j_off_{i}' in page_lines for i in (1, 2)))
     check('Feed the monster can ask for one to ten cookies, and says "cookie" for one', all(f'f_want_{i}' in page_lines for i in range(1, 11))
           and page_lines['f_want_1'].endswith(' one cookie.') and page_lines['f_want_10'].endswith(' ten cookies.'))
     check('the numbers one to twenty are all there', all(f'n_{i}' in page_lines for i in range(1, 21)))
@@ -87,10 +89,10 @@ with sync_playwright() as pw:
     # ---------------------------------------------------------------- the games page
     ctx, p = page_at(b, 390, 844)
     p.goto(BASE); p.wait_for_timeout(500)
-    check('the Learning Lab opens on its games: 5, with Letters and Numbers headings', p.eval_on_selector_all('.gametile', 'e => e.length') == 5 and p.is_visible('#numbersHead') and p.is_visible('#home'))
+    check('the Learning Lab opens on its games: 7, with Letters and Numbers headings', p.eval_on_selector_all('.gametile', 'e => e.length') == 7 and p.is_visible('#numbersHead') and p.is_visible('#home'))
     order = p.eval_on_selector_all('.gamelist > *', 'e => e.map(x => x.id)')
     check(f'Letters first, then Numbers ({", ".join(order)})', order.index('lettersHead') < order.index('playLetters') < order.index('numbersHead') < order.index('playCount')
-          < order.index('playQuick') < order.index('playFeed') < order.index('playMore'))
+          < order.index('playQuick') < order.index('playFeed') < order.index('playMore') < order.index('playTrain') < order.index('playJump'))
     p.screenshot(path=OUT / 'n0_games.png', full_page=True)
 
     # ---------------------------------------------------------------- Monster count, Easy, phone
@@ -427,6 +429,151 @@ with sync_playwright() as pw:
         if w == 360: p.screenshot(path=OUT / 'f5_feed_small.png')
         ctx.close()
 
+    # ---------------------------------------------------------------- Monster train, phone
+    ctx, p = page_at(b, 390, 844)
+    p.goto(BASE); p.wait_for_timeout(400)
+    p.click('#playTrain'); p.wait_for_function('TR.want > 0', timeout=5000)
+    check('Monster train opens #train with 3 levels and 6 dots', p.evaluate('location.hash') == '#train' and p.eval_on_selector_all('#trLevels .level', 'e => e.length') == 3
+          and p.eval_on_selector_all('#trProg i', 'e => e.length') == 6)
+    q = p.evaluate('TR.queue')
+    check(f'Easy: six trains counting up from 1 to 6, the last carriage empty ({[x["seq"] for x in q]})',
+          sorted(x['seq'][0] for x in q) == [1, 2, 3, 4, 5, 6] and all(x['seq'] == list(range(x['seq'][0], x['seq'][0] + 4)) and x['gap'] == 3 and x['kind'] == 'next' for x in q))
+    p.evaluate("TR.queue[0] = { seq: [3, 4, 5, 6], gap: 3, kind: 'next' }; TR.n = 0; trainNext()")
+    p.wait_for_function('!TR.busy', timeout=5000)
+    nums = p.eval_on_selector_all('#trTrain .car b', 'e => e.map(x => x.textContent)')
+    check(f'it pulls in: four carriages and an engine, the last one empty ({nums})', nums == ['3', '4', '5', '?'] and p.eval_on_selector_all('#trTrain .eng', 'e => e.length') == 1
+          and 'gap' in p.get_attribute('#trTrain .car >> nth=3', 'class'))
+    p.wait_for_function(f"window.__said.includes({json.dumps(page_lines['t_next'])})", timeout=6000)
+    check(f'the narrator reads along, then asks ({said(p)[-4:]})', said(p)[-4:] == ['three', 'four', 'five', page_lines['t_next']])
+    tiles = p.eval_on_selector_all('#trTiles .ntile', 'e => e.map(x => +x.dataset.n)')
+    check(f'three numbers to pick from, in order ({tiles})', 6 in tiles and len(tiles) == 3 and tiles == sorted(tiles))
+    p.screenshot(path=OUT / 't1_train.png')
+    wrong = next(v for v in tiles if v != 6); n0 = len(said(p))
+    p.click(tile(p, 'trTiles', wrong)); p.wait_for_timeout(150)
+    check('a wrong number shakes, "Let\'s count along."', 'nope' in p.get_attribute(tile(p, 'trTiles', wrong), 'class') and p.evaluate('TR.busy'))
+    p.wait_for_function('!TR.busy', timeout=10000)
+    check(f'  it counts up to the empty carriage, then asks again ({said(p)[n0:]})', said(p)[n0:] == [page_lines['t_count'], 'three', 'four', 'five', page_lines['t_next']])
+    p.click(tile(p, 'trTiles', 6)); p.wait_for_timeout(250)
+    check('the right number: a monster hops into the empty carriage, which gets its number', 'fill' in p.get_attribute('#trTrain .car >> nth=3', 'class')
+          and p.text_content('#trTrain .car >> nth=3') == '6')
+    p.wait_for_function("document.getElementById('trTrain').classList.contains('go')", timeout=5000)
+    check('  "six", praise, and off the train goes', 'six' in said(p)[n0:])
+    p.wait_for_function('TR.n === 1 && !TR.busy', timeout=8000)
+    check('  then the next train, and a pink dot (it took two goes)', p.eval_on_selector_all('#trProg i.miss', 'e => e.length') == 1 and p.text_content('#trTrain .car >> nth=3') == '?')
+    for k in range(1, 6):
+        p.wait_for_function(f'TR.n === {k} && !TR.busy', timeout=8000)
+        p.click(tile(p, 'trTiles', p.evaluate('TR.want')))
+    p.wait_for_function("!document.getElementById('trEnd').hidden", timeout=12000)
+    check(f'end of the round: "{p.text_content("#trEndWord")}", 5 green dots and 1 pink', p.text_content('#trEndWord') == 'Toot toot!'
+          and p.eval_on_selector_all('#trEndDots i.hit', 'e => e.length') == 5 and p.eval_on_selector_all('#trEndDots i.miss', 'e => e.length') == 1 and p.is_hidden('#trScene'))
+    p.click('#trLevels .level >> nth=1'); p.wait_for_timeout(300)
+    q = p.evaluate('TR.queue')
+    check(f'Medium: up to 10, four with a carriage missing in the middle and two at the end ({[(x["seq"], x["gap"]) for x in q]})',
+          all(x['seq'][3] <= 10 for x in q) and sorted(x['gap'] for x in q) == [1, 1, 2, 2, 3, 3] and all((x['kind'] == 'missing') == (x['gap'] < 3) for x in q))
+    p.evaluate("TR.queue[0] = { seq: [5, 6, 7, 8], gap: 1, kind: 'missing' }; TR.n = 0; trainNext()")
+    p.wait_for_function(f"window.__said.slice(-1)[0] === {json.dumps(page_lines['t_missing'])}", timeout=8000)
+    check(f'missing in the middle: it reads round the gap and asks "{said(p)[-1]}"', said(p)[-4:] == ['five', 'seven', 'eight', page_lines['t_missing']])
+    p.click('#trLevels .level >> nth=2'); p.wait_for_timeout(300)
+    q = p.evaluate('TR.queue')
+    check(f'Tricky: up to 20, three "what comes before" and three counting down ({[(x["seq"], x["kind"]) for x in q]})',
+          sorted(x['kind'] for x in q) == ['before'] * 3 + ['down'] * 3 and all(max(x['seq']) <= 20 and min(x['seq']) >= 1 for x in q)
+          and all(x['gap'] == 0 and x['seq'] == sorted(x['seq']) for x in q if x['kind'] == 'before') and all(x['gap'] == 3 and x['seq'] == sorted(x['seq'], reverse=True) for x in q if x['kind'] == 'down'))
+    p.evaluate("TR.queue[0] = { seq: [14, 13, 12, 11], gap: 3, kind: 'down' }; TR.n = 0; trainNext()")
+    p.wait_for_function(f"window.__said.slice(-1)[0] === {json.dumps(page_lines['t_next'])}", timeout=8000)
+    check(f'counting down: "Counting down!", the numbers, "What comes next?", and 4 numbers to pick from',
+          said(p)[-5:] == [page_lines['t_down'], 'fourteen', 'thirteen', 'twelve', page_lines['t_next']] and p.eval_on_selector_all('#trTiles .ntile', 'e => e.length') == 4)
+    p.wait_for_function('!TR.busy', timeout=3000)
+    p.evaluate("TR.queue[0] = { seq: [9, 10, 11, 12], gap: 0, kind: 'before' }; TR.n = 0; trainNext()")
+    p.wait_for_function(f"window.__said.slice(-1)[0] === {json.dumps(page_lines['t_before'])}", timeout=8000)
+    check(f'what comes before: the front carriage is empty, "{said(p)[-1]}"', p.text_content('#trTrain .car >> nth=0') == '?' and said(p)[-4:] == ['ten', 'eleven', 'twelve', page_lines['t_before']])
+    p.screenshot(path=OUT / 't2_train_before.png')
+    tiles = p.eval_on_selector_all('#trTiles .ntile', 'e => e.map(x => +x.dataset.n)'); n0 = len(said(p))
+    p.click(tile(p, 'trTiles', next(v for v in tiles if v != 9))); p.wait_for_function('!TR.busy', timeout=10000)
+    check(f'  a wrong answer there counts backwards to the gap ({said(p)[n0:]})', said(p)[n0:] == [page_lines['t_count'], 'twelve', 'eleven', 'ten', page_lines['t_before']])
+    p.click('#traingame .back'); p.wait_for_timeout(300)
+    p.evaluate("location.hash = '#train'"); p.wait_for_timeout(400)
+    check('it remembers the level (Tricky)', p.get_attribute('#trLevels .level >> nth=2', 'aria-pressed') == 'true')
+    ctx.close()
+
+    # ---------------------------------------------------------------- Jump in the bed, phone
+    ctx, p = page_at(b, 390, 844)
+    p.goto(BASE); p.wait_for_timeout(400)
+    p.click('#playJump'); p.wait_for_function('JB.a > 0', timeout=5000)
+    check('Jump in the bed opens #jump with 3 levels and 6 dots', p.evaluate('location.hash') == '#jump' and p.eval_on_selector_all('#jLevels .level', 'e => e.length') == 3
+          and p.eval_on_selector_all('#jProg i', 'e => e.length') == 6)
+    q = p.evaluate('JB.queue')
+    check(f'Easy: six different sums up to 5, one or two jumping on ({[(x["a"], x["b"]) for x in q]})',
+          len({(x['a'], x['b']) for x in q}) == 6 and all(x['kind'] == 'on' and x['a'] >= 1 and 1 <= x['b'] <= 2 and x['a'] + x['b'] <= 5 for x in q))
+    p.evaluate("JB.queue[0] = { a: 3, b: 2, kind: 'on' }; JB.n = 0; jumpNext()"); p.wait_for_timeout(200)
+    check('the story starts with three on the bed, the other two waiting off to the side', p.eval_on_selector_all('#jMons .jmon', 'e => e.length') == 5
+          and p.eval_on_selector_all('#jMons .jmon.away', 'e => e.length') == 2 and p.is_hidden('#jTiles'))
+    p.wait_for_function('!JB.busy', timeout=8000)
+    said_now = said(p)
+    check(f'"Three monsters on the bed." "Two more jump on!" "How many on the bed now?"', said_now[-3:] == [page_lines['j_bed_3'], page_lines['j_on_2'], page_lines['j_how_many']])
+    srcs = p.eval_on_selector_all('#jMons .jmon img', 'e => e.map(x => x.src)')
+    check('they jumped on, and they\'re a different monster from the three already there', p.eval_on_selector_all('#jMons .jmon.away', 'e => e.length') == 0
+          and len(set(srcs[:3])) == 1 and len(set(srcs[3:])) == 1 and srcs[0] != srcs[3])
+    tiles = p.eval_on_selector_all('#jTiles .ntile', 'e => e.map(x => +x.dataset.n)')
+    check(f'three numbers to pick from ({tiles}), and Watch again', 5 in tiles and len(tiles) == 3 and p.is_visible('#jWatch'))
+    p.screenshot(path=OUT / 'j1_jump.png')
+    n0 = len(said(p)); p.click('#jWatch'); p.wait_for_timeout(150)
+    check('Watch again: back to three on the bed, the two off to the side again', p.evaluate('JB.busy') and p.eval_on_selector_all('#jMons .jmon.away', 'e => e.length') == 2 and p.is_hidden('#jTiles'))
+    p.wait_for_function('!JB.busy', timeout=8000)
+    check('  and it tells the story again, with the same numbers to pick from', said(p)[n0:] == [page_lines['j_bed_3'], page_lines['j_on_2'], page_lines['j_how_many']]
+          and p.eval_on_selector_all('#jTiles .ntile', 'e => e.map(x => +x.dataset.n)') == tiles)
+    wrong = next(v for v in tiles if v != 5); n0 = len(said(p))
+    p.click(tile(p, 'jTiles', wrong)); p.wait_for_timeout(150)
+    check('a wrong number shakes', 'nope' in p.get_attribute(tile(p, 'jTiles', wrong), 'class'))
+    p.wait_for_function('!JB.busy', timeout=10000)
+    check(f'  "Let\'s count them.", a number on each monster on the bed, and the question again ({said(p)[n0:]})',
+          said(p)[n0:] == [page_lines['m_count'], 'one', 'two', 'three', 'four', 'five', page_lines['j_how_many']] and p.eval_on_selector_all('#jMons .jmon.done', 'e => e.length') == 5)
+    p.screenshot(path=OUT / 'j2_jump_counted.png')
+    p.click(tile(p, 'jTiles', 5)); p.wait_for_timeout(200)
+    check('the right number: they all bounce', 'happy' in p.get_attribute('#jScene', 'class') and 'yes' in p.get_attribute(tile(p, 'jTiles', 5), 'class'))
+    p.wait_for_function('JB.n === 1', timeout=6000)
+    check('  then the next story, and a pink dot', p.eval_on_selector_all('#jProg i.miss', 'e => e.length') == 1)
+    for k in range(1, 6):
+        p.wait_for_function(f'JB.n === {k} && !JB.busy && !document.getElementById("jTiles").hidden', timeout=10000)
+        p.click(tile(p, 'jTiles', p.evaluate('JB.total')))
+    p.wait_for_function("!document.getElementById('jEnd').hidden", timeout=12000)
+    check(f'end of the round: "{p.text_content("#jEndWord")}", 5 green dots and 1 pink', p.text_content('#jEndWord') == 'Great counting!'
+          and p.eval_on_selector_all('#jEndDots i.hit', 'e => e.length') == 5 and p.is_hidden('#jScene') and p.is_hidden('#jWatch'))
+    p.click('#jLevels .level >> nth=1'); p.wait_for_timeout(300)
+    q = p.evaluate('JB.queue')
+    check(f'Medium: sums from 5 to 10, up to three jumping on ({[(x["a"], x["b"]) for x in q]})', all(x['kind'] == 'on' and 5 <= x['a'] + x['b'] <= 10 and 1 <= x['b'] <= 3 for x in q))
+    p.click('#jLevels .level >> nth=2'); p.wait_for_timeout(300)
+    q = p.evaluate('JB.queue')
+    check(f'Tricky: three jump on and three roll off, never below one ({[(x["a"], x["b"], x["kind"]) for x in q]})',
+          sorted(x['kind'] for x in q) == ['off'] * 3 + ['on'] * 3 and all(x['a'] - x['b'] >= 1 for x in q if x['kind'] == 'off') and all(x['a'] + x['b'] <= 10 for x in q if x['kind'] == 'on'))
+    p.evaluate("JB.queue[0] = { a: 8, b: 2, kind: 'off' }; JB.n = 0; jumpNext()")
+    p.wait_for_function('!JB.busy', timeout=8000)
+    check(f'rolling off: "Eight monsters on the bed." "Oops! Two roll off!" and six left, with 4 numbers to pick from',
+          said(p)[-3:] == [page_lines['j_bed_8'], page_lines['j_off_2'], page_lines['j_how_many']] and p.eval_on_selector_all('#jMons .jmon:not(.off)', 'e => e.length') == 6
+          and p.eval_on_selector_all('#jMons .jmon.off', 'e => e.length') == 2 and p.eval_on_selector_all('#jTiles .ntile', 'e => e.length') == 4)
+    p.wait_for_timeout(700); p.screenshot(path=OUT / 'j3_jump_off.png')
+    ctx.close()
+
+    # every amount at every size: the train fits, the bed holds ten
+    for (w, h, name) in ((360, 740, 'small phone'), (390, 844, 'phone'), (904, 1000, 'folding phone open'), (1280, 800, 'laptop')):
+        ctx, p = page_at(b, w, h, touch=w < 1000)
+        p.goto(BASE + '#train'); p.wait_for_function('!TR.busy && TR.want > 0', timeout=6000)
+        p.evaluate("TR.queue[0] = { seq: [20, 19, 18, 17], gap: 3, kind: 'down' }; TR.n = 0; trainNext()"); p.wait_for_function('!TR.busy', timeout=6000)
+        g = p.evaluate("""(() => { const sc = $('trScene').getBoundingClientRect(), r = [...document.querySelectorAll('#trTrain .car, #trTrain .eng')].map(e => e.getBoundingClientRect());
+          const nums = [...document.querySelectorAll('#trTrain .car b')].map(e => ({ w: e.scrollWidth, cw: e.clientWidth }));
+          return { inside: r.every(x => x.left >= sc.left - 1 && x.right <= sc.right + 1 && x.top >= sc.top - 1), c: parseFloat($('trScene').style.getPropertyValue('--c')),
+                   font: parseFloat(getComputedStyle(document.querySelector('#trTrain .car b')).fontSize), fits: nums.every(n => n.w <= n.cw + 1) }; })()""")
+        check(f'{name} {w}px: the whole train is on screen, carriages {g["c"]:.0f} px, numbers {g["font"]:.0f} px and two-digit ones fit', g['inside'] and g['c'] >= 40 and g['font'] >= 16 and g['fits'])
+        p.goto(BASE + '#jump'); p.wait_for_function('JB.a > 0', timeout=5000)
+        r = p.evaluate("""(() => { JB.a = 10; JB.b = 0; JB.kind = 'on'; placeJump();
+          const sc = $('jScene').getBoundingClientRect(), all = [...document.querySelectorAll('#jMons .jmon')], r = all.map(e => e.getBoundingClientRect());
+          const front = r.filter((x, i) => all[i].style.zIndex === '3'), back = r.filter((x, i) => all[i].style.zIndex === '1');
+          let over = 0; [front, back].forEach(row => row.forEach((a, i) => row.slice(i + 1).forEach(c => { if (Math.abs(a.left - c.left) < a.width * .98) over++; })));
+          const shown = back.map(x => Math.max(0, Math.min(1, (Math.min(...front.map(f => f.top)) - x.top) / x.height)));
+          return { n: r.length, over, inside: r.every(x => x.left >= sc.left - 1 && x.right <= sc.right + 1 && x.top >= sc.top - 1), m: Math.round(r[0].width), shown: Math.min(...shown) }; })()""")
+        check(f'{name}: ten on the bed, {r["m"]} px each, no two in a row overlapping, all in the picture, the back row at least {r["shown"]:.0%} showing',
+              r['n'] == 10 and r['over'] == 0 and r['inside'] and r['m'] >= 36 and r['shown'] >= .6)
+        ctx.close()
+
     # ---------------------------------------------------------------- the narrator's three ways of speaking
     test_mp3 = None
     with tempfile.TemporaryDirectory() as td:
@@ -474,7 +621,7 @@ with sync_playwright() as pw:
     # ---------------------------------------------------------------- other sizes
     for (w, h, name) in ((360, 740, 'small phone'), (904, 1000, 'folding phone open'), (1280, 800, 'laptop')):
         ctx, p = page_at(b, w, h, touch=w < 1000)
-        for hsh in ('#count', '#quick', '#feed', '#more', ''):
+        for hsh in ('#count', '#quick', '#feed', '#more', '#train', '#jump', ''):
             p.goto(BASE + hsh); p.wait_for_timeout(700)
             check(f'{name} {w}px {hsh}: no sideways scroll', p.evaluate('document.documentElement.scrollWidth <= innerWidth'))
         p.goto(BASE + '#quick'); p.wait_for_function("!document.getElementById('qTiles').hidden", timeout=6000)

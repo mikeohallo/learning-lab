@@ -32,6 +32,20 @@ LINES += [
     {'id': 'm_more', 'kind': 'prompt', 'text': 'Which side has more?'},
     {'id': 'm_fewer', 'kind': 'prompt', 'text': 'Which side has fewer?'},
     {'id': 'm_count', 'kind': 'prompt', 'text': "Let's count them."},
+    # Monster train
+    {'id': 't_next', 'kind': 'prompt', 'text': 'What comes next?'},
+    {'id': 't_missing', 'kind': 'prompt', 'text': 'Which number is missing?'},
+    {'id': 't_before', 'kind': 'prompt', 'text': 'What comes before?'},
+    {'id': 't_down', 'kind': 'prompt', 'text': 'Counting down!'},
+    {'id': 't_count', 'kind': 'prompt', 'text': "Let's count along."},
+    # Jump in the bed
+    *[{'id': f'j_bed_{i}', 'kind': 'prompt', 'text': f"{w.capitalize()} {'monster' if i == 1 else 'monsters'} on the bed."} for i, w in enumerate(WORDS[:10], 1)],
+    {'id': 'j_on_1', 'kind': 'prompt', 'text': 'One more jumps on!'},
+    {'id': 'j_on_2', 'kind': 'prompt', 'text': 'Two more jump on!'},
+    {'id': 'j_on_3', 'kind': 'prompt', 'text': 'Three more jump on!'},
+    {'id': 'j_off_1', 'kind': 'prompt', 'text': 'Oops! One rolls off!'},
+    {'id': 'j_off_2', 'kind': 'prompt', 'text': 'Oops! Two roll off!'},
+    {'id': 'j_how_many', 'kind': 'prompt', 'text': 'How many on the bed now?'},
     # all the games
     {'id': 'try_again', 'kind': 'prompt', 'text': 'Try again.'},
     {'id': 'p_yes', 'kind': 'praise', 'text': 'Yes!'},

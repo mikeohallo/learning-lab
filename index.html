@@ -312,6 +312,72 @@ button { cursor: pointer; }
   font: 700 28px/48px var(--font-display); text-align: center; box-shadow: 0 0 0 3px #fff; scale: 0; transition: scale .25s; }
 .mside.shown .mtot { scale: 1; }
 @media (prefers-reduced-motion: reduce) { .fmon.chomp img, .fmon.nope img, .fslot.pop .ck, .fjar.give, .fjar.nope, .fjar.hint .glass, .mside.yes, .mside.nope { animation: none; } .fplate.eat .ck, .mmon b, .mtot { transition: none; }}
+/* Numbers: Monster train */
+.gpic.trainpic { background: linear-gradient(#DDF0FF 0 70%, #BFE6A0 70%); }
+.gpic.trainpic .tpc { position: absolute; bottom: 28px; width: 20px; height: 24px; border-radius: 5px 5px 3px 3px; background: var(--cc); box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .12); }
+.gpic.trainpic .tpc b { position: absolute; left: 2px; right: 2px; bottom: 3px; height: 13px; border-radius: 3px; background: #fff; font: 700 11px/13px var(--font-display); text-align: center; color: var(--ink); }
+.gpic.trainpic .tpc.q { background: #fff; box-shadow: inset 0 0 0 2px #C9BCDA; }
+.gpic.trainpic .tpc.q b { background: #F3EEF8; color: var(--ink-soft); }
+.gpic.trainpic .tpc img { position: absolute; left: 0; bottom: 12px; width: 20px; height: 20px; object-fit: contain; }
+.gpic.trainpic .ttr { position: absolute; left: 0; right: 0; bottom: 22px; height: 4px; background: #8C7A6B; }
+.gpic.trainpic svg { position: absolute; right: 1px; bottom: 25px; width: 28px; height: 26px; }
+.trscene { position: relative; display: block; width: 100%; height: calc(var(--c, 52px) * 1.75 + 40px); padding: 0; border: 0; overflow: hidden; border-radius: 18px;
+  background: radial-gradient(circle at 16% 26%, #fff 0 7%, transparent 7.5%), radial-gradient(circle at 24% 22%, #fff 0 9%, transparent 9.5%), linear-gradient(#DDF0FF 0 74%, #BFE6A0 74%); }
+.track { position: absolute; left: 0; right: 0; bottom: 16px; height: 12px; background: linear-gradient(#8C7A6B 0 4px, transparent 4px), repeating-linear-gradient(90deg, #A88E76 0 6px, transparent 6px 22px); }
+.train { position: absolute; left: 50%; bottom: 25px; translate: -50% 0; display: flex; align-items: flex-end; gap: 9px; transition: transform .9s ease-out; }
+.train.arrive { transform: translateX(-130vw); transition: none; }
+.train.go { transform: translateX(130vw); transition: transform 1s ease-in; }
+.car { --cc: #F7B8D6; position: relative; flex: none; width: var(--c); height: calc(var(--c) * 1.02); border-radius: 10px 10px 6px 6px; background: var(--cc); box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .12); transition: translate .2s; }
+.car::after { content: ''; position: absolute; right: -10px; bottom: 9px; width: 11px; height: 4px; border-radius: 2px; background: var(--ink); }
+.car img { position: absolute; left: 50%; bottom: 46%; width: 88%; height: auto; aspect-ratio: 1; object-fit: contain; translate: -50% 0; filter: drop-shadow(0 2px 0 rgba(58, 40, 82, .16)); }
+.car b { position: absolute; left: 9%; right: 9%; bottom: 11%; height: 46%; border-radius: 8px; background: #fff; display: grid; place-items: center;
+  font: 700 calc(var(--c) * .42)/1 var(--font-display); color: var(--ink); }
+.car .wh, .eng .wh { position: absolute; bottom: -9px; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); box-shadow: inset 0 0 0 5px #6E5C86; }
+.car .wh:nth-of-type(1) { left: 8%; }
+.car .wh:nth-of-type(2) { right: 8%; }
+.car.gap { background: #fff; box-shadow: inset 0 0 0 3px #C9BCDA; }
+.car.gap b { color: var(--ink-soft); background: #F3EEF8; }
+.car.gap img { visibility: hidden; }
+.car.gap.fill { background: var(--cc); box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .12); }
+.car.gap.fill b { color: var(--ink); background: #fff; }
+.car.gap.fill img { visibility: visible; animation: hopin .5s ease both; }
+@keyframes hopin { 0% { translate: -50% -60%; opacity: 0; } 60% { translate: -50% 6%; opacity: 1; } 100% { translate: -50% 0; } }
+.car.lit { translate: 0 -6px; }
+.car.lit b { background: #FFE58A; }
+.eng { position: relative; flex: none; width: calc(var(--c) * 1.22); height: calc(var(--c) * 1.05); }
+.eng svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.eng .wh:nth-of-type(1) { left: 12%; width: 21px; height: 21px; bottom: -11px; }
+.eng .wh:nth-of-type(2) { left: 52%; }
+.eng .wh:nth-of-type(3) { left: 76%; }
+.eng .puff { position: absolute; left: 66%; top: -18%; width: 18px; height: 18px; border-radius: 50%; background: #fff; opacity: 0; }
+.train.go .puff, .train.toot .puff { animation: puff .9s ease-out; }
+.train.go .puff:nth-of-type(5), .train.toot .puff:nth-of-type(5) { animation-delay: .3s; }
+@keyframes puff { 0% { opacity: .95; transform: translate(0, 0) scale(.6); } 100% { opacity: 0; transform: translate(-26px, -34px) scale(1.6); } }
+/* Numbers: Jump in the bed */
+.gpic.jumppic { background: linear-gradient(#EFE6FA 0 80%, #E2C9A6 80%); }
+.gpic.jumppic .jb { position: absolute; left: 8px; right: 10px; top: 60px; height: 16px; border-radius: 4px 4px 8px 8px; background: repeating-linear-gradient(45deg, #F7B8D6 0 6px, #F4A3C8 6px 12px); box-shadow: 0 -5px 0 #fff; }
+.gpic.jumppic .jh { position: absolute; left: 3px; top: 34px; width: 9px; height: 48px; border-radius: 6px 6px 2px 2px; background: var(--purple); }
+.gpic.jumppic img { position: absolute; width: 30px; height: 30px; object-fit: contain; }
+.jscene { position: relative; overflow: hidden; border-radius: 18px; background: linear-gradient(#EFE6FA 0 86%, #E2C9A6 86%); }
+.jbed i { position: absolute; display: block; }
+.jhead { left: 5%; width: 8%; top: 36%; bottom: 14%; border-radius: 14px 14px 4px 4px; background: var(--purple); }
+.jfoot { right: 5%; width: 6%; top: 54%; bottom: 14%; border-radius: 10px 10px 4px 4px; background: var(--purple); }
+.jmat { left: 12%; right: 10%; top: 62%; height: 9%; border-radius: 8px; background: #fff; box-shadow: inset 0 -3px 0 #E4D9EC; }
+.jblank { z-index: 2; left: 12%; right: 10%; top: 69%; height: 12%; border-radius: 4px 4px 12px 12px; background: repeating-linear-gradient(45deg, #F7B8D6 0 10px, #F4A3C8 10px 20px); }
+.jleg { top: 80%; height: 6%; width: 4%; border-radius: 0 0 3px 3px; background: #7E5BB0; }
+.jleg.l { left: 15%; } .jleg.r { right: 13%; }
+.jmons { position: absolute; inset: 0; }
+.jmon { position: absolute; width: var(--m); height: var(--m); margin: calc(var(--m) / -2) 0 0 calc(var(--m) / -2); transition: transform .62s cubic-bezier(.25, .8, .35, 1), opacity .62s; }
+.jmon img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 0 rgba(58, 40, 82, .16)); }
+.jmon.away { transform: translateX(var(--dx)); }
+.jmon.leap img { animation: leap .62s ease-out; }
+@keyframes leap { 0%, 100% { translate: 0 0; } 45% { translate: 0 calc(var(--m) * -1.3); } }
+.jmon.off { transform: translate(var(--dx), calc(var(--m) * 1.4)) rotate(220deg); opacity: 0; transition-timing-function: ease-in; }
+.jmon b { position: absolute; right: -5px; top: -5px; min-width: max(18px, calc(var(--m) * .46)); height: max(18px, calc(var(--m) * .46)); padding: 0 3px; border-radius: 999px; background: var(--ink); color: #fff;
+  font: 700 max(12px, calc(var(--m) * .32))/max(18px, calc(var(--m) * .46)) var(--font-display); text-align: center; box-shadow: 0 0 0 2px #fff; scale: 0; transition: scale .2s; z-index: 1; }
+.jmon.done b { scale: 1; }
+.jscene.happy .jmon:not(.off) img { animation: bounce .5s ease both; }
+@media (prefers-reduced-motion: reduce) { .train, .train.go, .jmon { transition: none; } .car.gap.fill img, .train.go .puff, .train.toot .puff, .jmon.leap img, .jscene.happy .jmon img { animation: none; } }
 </style>
 </head>
 <body>
@@ -340,6 +406,12 @@ button { cursor: pointer; }
       <button class="gametile" id="playMore" type="button">
         <span class="gpic morepic" aria-hidden="true"><img src="faces/F10.webp" alt="" style="left:10px;top:20px"><img src="faces/F10.webp" alt="" style="left:12px;top:54px"><img src="faces/F04.webp" alt="" style="left:52px;top:8px"><img src="faces/F04.webp" alt="" style="left:64px;top:33px"><img src="faces/F04.webp" alt="" style="left:51px;top:56px"><img src="faces/F04.webp" alt="" style="left:66px;top:63px"></span>
         <span><b>More or less</b><small>Which side has more?</small></span></button>
+      <button class="gametile" id="playTrain" type="button">
+        <span class="gpic trainpic" aria-hidden="true"><span class="ttr"></span><span class="tpc" style="--cc:#F7B8D6;left:2px"><img src="faces/F18.webp" alt=""><b>1</b></span><span class="tpc" style="--cc:#B8E39A;left:24px"><img src="faces/F29.webp" alt=""><b>2</b></span><span class="tpc q" style="left:46px"><b>?</b></span><svg viewBox="0 0 84 72" aria-hidden="true"><rect x="0" y="4" width="36" height="8" rx="3" fill="#3A2852"/><rect x="3" y="10" width="30" height="50" rx="5" fill="#54A6E2"/><rect x="8" y="16" width="20" height="16" rx="3" fill="#fff"/><rect x="31" y="28" width="44" height="32" rx="9" fill="#EC6AA8"/><rect x="52" y="12" width="11" height="20" rx="2" fill="#3A2852"/><rect x="49" y="9" width="17" height="6" rx="2" fill="#3A2852"/><path d="M74 44l9 16H70z" fill="#3A2852"/><circle cx="66" cy="38" r="4" fill="#F2C828"/></svg></span>
+        <span><b>Monster train</b><small>What number comes next?</small></span></button>
+      <button class="gametile" id="playJump" type="button">
+        <span class="gpic jumppic" aria-hidden="true"><i class="jh"></i><i class="jb"></i><img src="faces/F02.webp" alt="" style="left:14px;top:34px"><img src="faces/F02.webp" alt="" style="left:38px;top:34px"><img src="faces/F13.webp" alt="" style="left:62px;top:4px"></span>
+        <span><b>Jump in the bed</b><small>How many on the bed now?</small></span></button>
     </div>
   </section>
 
@@ -470,6 +542,41 @@ button { cursor: pointer; }
     </div>
   </section>
 
+  <section id="traingame" class="stack" hidden aria-label="Monster train">
+    <div class="gamebar"><button class="back" type="button" data-go="home"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>All games</button><button class="mute" type="button"></button></div>
+    <div class="panel npanel">
+      <h2 class="h2">Monster train</h2>
+      <div class="levels three" id="trLevels" role="group" aria-label="How hard"></div>
+      <div class="lsay" id="trSay" aria-live="polite"></div>
+      <button class="trscene" id="trScene" type="button" aria-label="Hear it again"><span class="train" id="trTrain"></span><span class="track"></span></button>
+      <div class="ntiles" id="trTiles" hidden></div>
+      <div class="wdots" id="trProg" aria-hidden="true"></div>
+      <div class="hend" id="trEnd" hidden>
+        <div class="nword" id="trEndWord">Toot toot!</div>
+        <div class="wdots" id="trEndDots" aria-hidden="true"></div>
+        <button class="btn primary" id="trAgain" type="button">Play again</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="jumpgame" class="stack" hidden aria-label="Jump in the bed">
+    <div class="gamebar"><button class="back" type="button" data-go="home"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>All games</button><button class="mute" type="button"></button></div>
+    <div class="panel npanel">
+      <h2 class="h2">Jump in the bed</h2>
+      <div class="levels three" id="jLevels" role="group" aria-label="How hard"></div>
+      <div class="lsay" id="jSay" aria-live="polite"></div>
+      <div class="jscene" id="jScene" role="img" aria-label="Monsters on a bed"><div class="jbed" aria-hidden="true"><i class="jhead"></i><i class="jfoot"></i><i class="jleg l"></i><i class="jleg r"></i><i class="jmat"></i><i class="jblank"></i></div><div class="jmons" id="jMons"></div></div>
+      <button class="btn quiet qpeek" id="jWatch" type="button" hidden><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Watch again</button>
+      <div class="ntiles" id="jTiles" hidden></div>
+      <div class="wdots" id="jProg" aria-hidden="true"></div>
+      <div class="hend" id="jEnd" hidden>
+        <div class="nword" id="jEndWord">Great counting!</div>
+        <div class="wdots" id="jEndDots" aria-hidden="true"></div>
+        <button class="btn primary" id="jAgain" type="button">Play again</button>
+      </div>
+    </div>
+  </section>
+
   <p class="more"><a id="morePlay" href="https://play.mikeohalloran.au/">More to play<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a></p>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
@@ -570,13 +677,13 @@ function renderTitle() {
 }
 
 // ------------------------------------------------------------- screens ---
-const screens = ['home', 'lettergame', 'countgame', 'quickgame', 'feedgame', 'moregame'];
-const HASHES = { home: '', lettergame: '#letters', countgame: '#count', quickgame: '#quick', feedgame: '#feed', moregame: '#more' };
+const screens = ['home', 'lettergame', 'countgame', 'quickgame', 'feedgame', 'moregame', 'traingame', 'jumpgame'];
+const HASHES = { home: '', lettergame: '#letters', countgame: '#count', quickgame: '#quick', feedgame: '#feed', moregame: '#more', traingame: '#train', jumpgame: '#jump' };
 function show(id) {
   if (id !== 'lettergame') stopLetters();
   stopNumbers();
   screens.forEach(s => { $(s).hidden = s !== id; });
-  try {   // keep the address in step, so each game (#letters, #count, #quick, #feed, #more) can be bookmarked or saved to a home screen
+  try {   // keep the address in step, so each game (#letters, #count, #quick, #feed, #more, #train, #jump) can be bookmarked or saved to a home screen
     const h = HASHES[id] || '';
     if (location.hash !== h) history.replaceState(null, '', location.pathname + location.search + h);
   } catch (e) {}
@@ -588,6 +695,8 @@ function openGame(id) {
   else if (id === 'quickgame') openQuick();
   else if (id === 'feedgame') openFeed();
   else if (id === 'moregame') openMore();
+  else if (id === 'traingame') openTrain();
+  else if (id === 'jumpgame') openJump();
   else show('home');
 }
 function route() {
@@ -697,6 +806,8 @@ const sound = (() => {
     giggle() { [0, .1, .2, .3].forEach((at, i) => tone({ f0: 700 + i * 60, f1: 900 + i * 60, dur: .08, vol: .07, at: .45 + at })); },
     whoosh() { hiss({ dur: .6, f0: 300, f1: 1800, q: .6, vol: .08, attack: .15 }); [659.25, 880, 1318.5].forEach((f, i) => tone({ f0: f, dur: .5, vol: .05, at: .35 + i * .08 })); },
     chime() { [784, 1046.5, 1318.5].forEach((f, i) => tone({ f0: f, dur: .35, vol: .06, at: i * .07 })); },
+    toot() { [0, .34].forEach(at => { tone({ f0: 620, f1: 596, dur: .28, type: 'triangle', vol: .09, at, attack: .02 }); tone({ f0: 930, f1: 900, dur: .28, vol: .05, at, attack: .02 }); }); },
+    chug() { [0, .16, .32, .48, .64].forEach((at, i) => hiss({ dur: .09, kind: 'bandpass', f0: 800 + i * 60, q: .9, vol: .07, at, attack: .01 })); },
     munch() { [0, .2, .4].forEach(at => { hiss({ dur: .09, kind: 'lowpass', f0: 1300, f1: 500, vol: .14, at, attack: .004 }); tone({ f0: 150, f1: 90, dur: .08, type: 'triangle', vol: .08, at }); }); },
     out() { const c = ac(); return c ? { ctx: c, master } : null; },   // for the recorded voices in Letters
   };
@@ -715,7 +826,7 @@ function syncMute() {
 // The maths games. One narrator, made with text-to-speech (numbers/number_voices.py) and played through the game's
 // own audio so the mute button covers it. A clip that isn't made yet is said by the browser's own voice if it has
 // one, otherwise shown as words. numbers/voices/index.json lists the clips there are.
-const NUM_LINES = /*NUM_LINES*/{"n_1":"one","n_2":"two","n_3":"three","n_4":"four","n_5":"five","n_6":"six","n_7":"seven","n_8":"eight","n_9":"nine","n_10":"ten","n_11":"eleven","n_12":"twelve","n_13":"thirteen","n_14":"fourteen","n_15":"fifteen","n_16":"sixteen","n_17":"seventeen","n_18":"eighteen","n_19":"nineteen","n_20":"twenty","c_start":"Let's count the monsters! Tap each one.","c_how_many":"How many monsters?","c_already":"We counted that one!","q_look":"Quick look!","q_how_many":"How many did you see?","q_again":"Have another look.","f_want_1":"This monster wants one cookie.","f_want_2":"This monster wants two cookies.","f_want_3":"This monster wants three cookies.","f_want_4":"This monster wants four cookies.","f_want_5":"This monster wants five cookies.","f_want_6":"This monster wants six cookies.","f_want_7":"This monster wants seven cookies.","f_want_8":"This monster wants eight cookies.","f_want_9":"This monster wants nine cookies.","f_want_10":"This monster wants ten cookies.","f_tap":"Tap the jar to put cookies on the plate.","f_more":"Still hungry! Put some more on.","f_less":"Oh no, too many! Take some away.","f_one_more":"This monster wants one more!","f_one_less":"This monster wants one less.","f_yum":"Yum yum!","m_more":"Which side has more?","m_fewer":"Which side has fewer?","m_count":"Let's count them.","try_again":"Try again.","p_yes":"Yes!","p_right":"That's right!","p_great_counting":"Great counting!","p_sharp":"Super sharp eyes!","p_well_done":"Well done!"}/*/NUM_LINES*/;
+const NUM_LINES = /*NUM_LINES*/{"n_1":"one","n_2":"two","n_3":"three","n_4":"four","n_5":"five","n_6":"six","n_7":"seven","n_8":"eight","n_9":"nine","n_10":"ten","n_11":"eleven","n_12":"twelve","n_13":"thirteen","n_14":"fourteen","n_15":"fifteen","n_16":"sixteen","n_17":"seventeen","n_18":"eighteen","n_19":"nineteen","n_20":"twenty","c_start":"Let's count the monsters! Tap each one.","c_how_many":"How many monsters?","c_already":"We counted that one!","q_look":"Quick look!","q_how_many":"How many did you see?","q_again":"Have another look.","f_want_1":"This monster wants one cookie.","f_want_2":"This monster wants two cookies.","f_want_3":"This monster wants three cookies.","f_want_4":"This monster wants four cookies.","f_want_5":"This monster wants five cookies.","f_want_6":"This monster wants six cookies.","f_want_7":"This monster wants seven cookies.","f_want_8":"This monster wants eight cookies.","f_want_9":"This monster wants nine cookies.","f_want_10":"This monster wants ten cookies.","f_tap":"Tap the jar to put cookies on the plate.","f_more":"Still hungry! Put some more on.","f_less":"Oh no, too many! Take some away.","f_one_more":"This monster wants one more!","f_one_less":"This monster wants one less.","f_yum":"Yum yum!","m_more":"Which side has more?","m_fewer":"Which side has fewer?","m_count":"Let's count them.","t_next":"What comes next?","t_missing":"Which number is missing?","t_before":"What comes before?","t_down":"Counting down!","t_count":"Let's count along.","j_bed_1":"One monster on the bed.","j_bed_2":"Two monsters on the bed.","j_bed_3":"Three monsters on the bed.","j_bed_4":"Four monsters on the bed.","j_bed_5":"Five monsters on the bed.","j_bed_6":"Six monsters on the bed.","j_bed_7":"Seven monsters on the bed.","j_bed_8":"Eight monsters on the bed.","j_bed_9":"Nine monsters on the bed.","j_bed_10":"Ten monsters on the bed.","j_on_1":"One more jumps on!","j_on_2":"Two more jump on!","j_on_3":"Three more jump on!","j_off_1":"Oops! One rolls off!","j_off_2":"Oops! Two roll off!","j_how_many":"How many on the bed now?","try_again":"Try again.","p_yes":"Yes!","p_right":"That's right!","p_great_counting":"Great counting!","p_sharp":"Super sharp eyes!","p_well_done":"Well done!"}/*/NUM_LINES*/;
 const NUM = n => 'n_' + n;
 const nstore = (() => { try { return JSON.parse(localStorage.getItem('learning-lab.numbers')) || {}; } catch (e) { return {}; } })();
 function nsave() { try { localStorage.setItem('learning-lab.numbers', JSON.stringify(nstore)); } catch (e) {} }
@@ -1322,9 +1433,255 @@ async function openMore() {
   if (!$('moregame').hidden) newMoreRound();
 }
 
+// ---- Monster train: four carriages, one empty; which number goes there?
+const TR = { level: '1', round: 0, n: 0, res: [], queue: [], seq: [], gap: 0, kind: 'next', want: 0, tries: 0, busy: false };
+const TR_ROUND = 6;
+const TR_LEVELS = [{ key: '1', name: 'Easy', sub: "what's next", hi: 10 }, { key: '2', name: 'Medium', sub: "what's missing", hi: 10 },
+                   { key: '3', name: 'Tricky', sub: 'up to 20', hi: 20 }];
+const trLevel = () => TR_LEVELS.find(l => l.key === TR.level) || TR_LEVELS[0];
+const TR_ASK = { next: 't_next', missing: 't_missing', before: 't_before', down: 't_next' };
+const CAR_COLOURS = ['#F7B8D6', '#FFC48A', '#B8E39A', '#D3C2F2'];
+const ENGINE_SVG = '<svg viewBox="0 0 84 72" aria-hidden="true" class="engsvg"><rect x="0" y="4" width="36" height="8" rx="3" fill="#3A2852"/><rect x="3" y="10" width="30" height="50" rx="5" fill="#54A6E2"/><rect x="8" y="16" width="20" height="16" rx="3" fill="#fff"/><rect x="31" y="28" width="44" height="32" rx="9" fill="#EC6AA8"/><rect x="52" y="12" width="11" height="20" rx="2" fill="#3A2852"/><rect x="49" y="9" width="17" height="6" rx="2" fill="#3A2852"/><path d="M74 44l9 16H70z" fill="#3A2852"/><circle cx="66" cy="38" r="4" fill="#F2C828"/></svg>';
+function trainQueue(L) {
+  const up = s => [s, s + 1, s + 2, s + 3];
+  if (L.key === '1') return shuffleArr([1, 2, 3, 4, 5, 6]).map(s => ({ seq: up(s), gap: 3, kind: 'next' }));       // 1 2 3 _
+  if (L.key === '2') {
+    const gaps = shuffleArr([1, 1, 2, 2, 3, 3]);                                                                   // 4 _ 6 7 or 4 5 _ 7
+    return shuffleArr([1, 2, 3, 4, 5, 6, 7]).slice(0, TR_ROUND).map((s, i) => ({ seq: up(s), gap: gaps[i], kind: gaps[i] === 3 ? 'next' : 'missing' }));
+  }
+  const before = shuffleArr([...Array(17).keys()].map(i => i + 1)).slice(0, 3).map(s => ({ seq: up(s), gap: 0, kind: 'before' }));     // _ 8 9 10
+  const down = shuffleArr([...Array(16).keys()].map(i => i + 5)).slice(0, 3).map(t => ({ seq: [t, t - 1, t - 2, t - 3], gap: 3, kind: 'down' }));   // 10 9 8 _
+  return shuffleArr([...before, ...down]);
+}
+function buildTrain() {
+  const scene = $('trScene'), tr = $('trTrain');
+  const avail = (scene.clientWidth || 300) - 16;
+  const c = Math.max(40, Math.min(74, Math.floor((avail - 4 * 9 - 10) / 5.22)));
+  scene.style.setProperty('--c', c + 'px');
+  tr.className = 'train arrive'; tr.textContent = '';
+  const faces = faceSet(4);
+  TR.seq.forEach((v, i) => {
+    const car = document.createElement('span'); car.className = 'car' + (i === TR.gap ? ' gap' : ''); car.style.setProperty('--cc', CAR_COLOURS[i]);
+    const im = new Image(); im.alt = ''; im.src = `faces/F${pad(faces[i])}.webp`; im.draggable = false;
+    const b = document.createElement('b'); b.textContent = i === TR.gap ? '?' : v;
+    car.append(im, b, Object.assign(document.createElement('i'), { className: 'wh' }), Object.assign(document.createElement('i'), { className: 'wh' }));
+    tr.append(car);
+  });
+  const eng = document.createElement('span'); eng.className = 'eng'; eng.innerHTML = ENGINE_SVG + '<i class="wh"></i><i class="wh"></i><i class="wh"></i><i class="puff"></i><i class="puff"></i>';
+  tr.append(eng);
+  scene.setAttribute('aria-label', 'A train: ' + TR.seq.map((v, i) => i === TR.gap ? 'an empty carriage' : v).join(', ') + '. Tap to hear it again');
+}
+const trCars = () => [...$('trTrain').querySelectorAll('.car')];
+async function sayAlong(items, my, still) {        // say each number as its carriage (or monster) lights up
+  for (const [el, id] of items) {
+    if (!still(my)) return false;
+    el.classList.add('lit');
+    const ok = await nvoice.say([id], 70);
+    el.classList.remove('lit');
+    if (!ok || !still(my)) return false;
+  }
+  return true;
+}
+const trStill = my => my === TR.round;
+async function trainRead(my) {                     // read the train out, then ask
+  const cars = trCars(), items = TR.seq.map((v, i) => [cars[i], NUM(v)]).filter((x, i) => i !== TR.gap);
+  if (TR.kind === 'down' && !await nvoice.say(['t_down'])) return false;
+  if (!await sayAlong(items, my, trStill)) return false;
+  return nvoice.say([TR_ASK[TR.kind]]);
+}
+function newTrainRound() {
+  TR.n = 0; TR.res = []; TR.queue = trainQueue(trLevel());
+  $('trEnd').hidden = true; ['trScene', 'trProg'].forEach(id => { $(id).hidden = false; });
+  drawNDots('trProg', TR); trainNext();
+}
+function trainNext() {
+  nvoice.stop();
+  const my = ++TR.round; TR.busy = true; TR.tries = 0;
+  if (TR.n >= TR.queue.length) return trainEnd();
+  Object.assign(TR, TR.queue[TR.n]); TR.want = TR.seq[TR.gap];
+  $('trTiles').hidden = true; $('trTiles').textContent = '';
+  buildTrain();
+  nvoice.preload([TR_ASK[TR.kind], 't_down', 't_count', 'p_right', 'p_yes', ...TR.seq.map(NUM)]);
+  const tr = $('trTrain'); void tr.offsetWidth; tr.classList.remove('arrive');     // in it comes from the left
+  sound.chug();
+  lwait(reduced ? 50 : 950).then(async () => {
+    if (my !== TR.round) return;
+    tr.classList.add('toot'); sound.toot();
+    numTiles('trTiles', nearNumbers(TR.want, TR.level === '3' ? 4 : 3, 1, trLevel().hi), trainAnswer);
+    $('trTiles').hidden = false; TR.busy = false;
+    await lwait(400); if (my !== TR.round) return;
+    tr.classList.remove('toot'); trainRead(my);
+  });
+}
+function trainAnswer(btn, v) {
+  if (TR.busy || btn.classList.contains('yes')) return;
+  sound.unlock();
+  const my = TR.round;
+  if (v === TR.want) {
+    TR.busy = true; btn.classList.add('yes'); sound.chime();
+    [...$('trTiles').children].forEach(b => b !== btn && b.classList.add('dim'));
+    const gap = trCars()[TR.gap]; gap.classList.add('fill'); gap.querySelector('b').textContent = v;   // a monster hops in
+    TR.res[TR.n] = TR.tries ? 'miss' : 'hit'; drawNDots('trProg', TR);
+    nvoice.say([NUM(v), praise()]).then(() => {
+      if (my !== TR.round) return;
+      sound.toot(); sound.chug(); $('trTrain').classList.add('go');               // and off it goes
+      lwait(reduced ? 200 : 1050).then(() => { if (my === TR.round) { TR.n++; trainNext(); } });
+    });
+  } else {
+    TR.tries++; TR.busy = true; btn.classList.remove('nope'); void btn.offsetWidth; btn.classList.add('nope');
+    trainCount(my).then(ok => { if (!ok || my !== TR.round) return; TR.busy = false; nvoice.say([TR_ASK[TR.kind]]); });
+  }
+}
+async function trainCount(my) {     // "Let's count along": up to the empty carriage (backwards, when it's at the front)
+  if (!await nvoice.say(['t_count'])) return false;
+  const cars = trCars();
+  const order = TR.gap === 0 ? [3, 2, 1] : [...Array(TR.gap).keys()];
+  if (!await sayAlong(order.map(i => [cars[i], NUM(TR.seq[i])]), my, trStill)) return false;
+  cars[TR.gap].classList.add('lit'); await lwait(700); cars[TR.gap].classList.remove('lit');
+  return my === TR.round;
+}
+function trainEnd() {
+  TR.busy = true; $('trSay').classList.remove('show');
+  ['trScene', 'trTiles', 'trProg'].forEach(id => { $(id).hidden = true; });
+  const hits = TR.res.filter(r => r === 'hit').length;
+  $('trEndWord').textContent = hits === TR.queue.length ? 'All first go!' : 'Toot toot!';
+  drawNDots('trEndDots', TR); $('trEnd').hidden = false;
+  sound.jingle(); nvoice.say(['p_well_done'], 120, false);
+}
+function trainLevel(key) {
+  TR.level = key; nstore.train = key; nsave();
+  buildNLevels('trLevels', TR_LEVELS, TR.level, trainLevel); newTrainRound();
+}
+async function openTrain() {
+  show('traingame'); nvoice.target($('trSay'));
+  TR.level = TR_LEVELS.some(l => l.key === nstore.train) ? nstore.train : '1';
+  buildNLevels('trLevels', TR_LEVELS, TR.level, trainLevel);
+  await nvoice.load();
+  if (!$('traingame').hidden) newTrainRound();
+}
+
+// ---- Jump in the bed: some monsters on the bed, more jump on (or, on Tricky, some roll off); how many now?
+const JB = { level: '1', round: 0, n: 0, res: [], queue: [], a: 0, b: 0, kind: 'on', total: 0, tries: 0, busy: false };
+const JB_ROUND = 6;
+const JB_LEVELS = [{ key: '1', name: 'Easy', sub: 'up to 5' }, { key: '2', name: 'Medium', sub: 'up to 10' }, { key: '3', name: 'Tricky', sub: 'on and off' }];
+const jbLevel = () => JB_LEVELS.find(l => l.key === JB.level) || JB_LEVELS[0];
+function jumpQueue(L) {
+  const pick = (pairs, k) => shuffleArr(pairs).slice(0, k);
+  const on = (lo, hi, bmax) => { const p = []; for (let a = lo; a <= hi; a++) for (let b = 1; b <= bmax; b++) if (a + b <= (L.key === '1' ? 5 : 10)) p.push({ a, b, kind: 'on' }); return p; };
+  if (L.key === '1') return pick(on(1, 4, 2), JB_ROUND);                 // 3 and 2 more
+  if (L.key === '2') return pick(on(2, 8, 3).filter(x => x.a + x.b >= 5), JB_ROUND);
+  const off = []; for (let a = 3; a <= 10; a++) for (let b = 1; b <= 2; b++) off.push({ a, b, kind: 'off' });
+  return shuffleArr([...pick(on(3, 8, 3).filter(x => x.b >= 2), 3), ...pick(off, 3)]);   // and some roll off
+}
+function placeJump() {
+  const sc = $('jScene'), box = $('jMons'), W = sc.clientWidth || 300, H = Math.round(Math.min(300, Math.max(200, W * .7)));
+  sc.style.height = H + 'px'; box.textContent = ''; sc.classList.remove('happy');
+  const m = Math.floor(Math.min(64, W * .135)); box.style.setProperty('--m', m + 'px');
+  const frontY = H * .62 - m * .3, backY = frontY - m * .92;
+  const slots = [.2, .35, .5, .65, .8].map(x => [W * x, frontY, 3]).concat([.275, .425, .575, .725, .125].map(x => [W * x, backY, 1]));
+  const [fa, fb] = faceSet(2), n = JB.kind === 'on' ? JB.a + JB.b : JB.a;
+  for (let i = 0; i < n; i++) {
+    const [x, y, z] = slots[i], mover = JB.kind === 'on' ? i >= JB.a : i >= JB.a - JB.b;
+    const d = document.createElement('span'); d.className = 'jmon';
+    d.style.left = (x / W * 100).toFixed(2) + '%'; d.style.top = (y / H * 100).toFixed(2) + '%'; d.style.zIndex = z;
+    d.style.setProperty('--dx', Math.round(W + m - x) + 'px');
+    if (mover) d.classList.add(JB.kind === 'on' ? 'away' : 'leaving');
+    const im = new Image(); im.alt = ''; im.src = `faces/F${pad(JB.kind === 'on' && mover ? fb : fa)}.webp`; im.draggable = false;
+    d.append(im, document.createElement('b')); box.append(d);
+  }
+  sc.setAttribute('aria-label', `${JB.a} monsters on the bed, then ${JB.b} ${JB.kind === 'on' ? 'jump on' : 'roll off'}`);
+}
+const jbStill = my => my === JB.round;
+async function jumpPlay(my) {                       // the story: how many on the bed, then some jump on or roll off
+  JB.busy = true; $('jWatch').hidden = true; $('jTiles').hidden = true;
+  placeJump();
+  await lwait(350); if (my !== JB.round) return;
+  if (!await nvoice.say(['j_bed_' + JB.a])) return;
+  await lwait(200); if (my !== JB.round) return;
+  const movers = [...$('jMons').querySelectorAll(JB.kind === 'on' ? '.jmon.away' : '.jmon.leaving')];
+  const told = nvoice.say([(JB.kind === 'on' ? 'j_on_' : 'j_off_') + JB.b]);
+  for (const mv of movers) {
+    if (my !== JB.round) return;
+    if (JB.kind === 'on') { mv.classList.remove('away'); mv.classList.add('leap'); sound.boing(); }
+    else { mv.classList.add('off'); sound.fwip(); }
+    await lwait(reduced ? 60 : 520);
+  }
+  if (!await told) return;
+  await lwait(400); if (my !== JB.round) return;
+  JB.busy = false; $('jWatch').hidden = false;
+  if (!$('jTiles').children.length) numTiles('jTiles', nearNumbers(JB.total, JB.level === '3' ? 4 : 3, 1, 10), jumpAnswer);
+  $('jTiles').hidden = false;
+  nvoice.say(['j_how_many']);
+}
+function newJumpRound() {
+  JB.n = 0; JB.res = []; JB.queue = jumpQueue(jbLevel());
+  $('jEnd').hidden = true; ['jScene', 'jProg'].forEach(id => { $(id).hidden = false; });
+  drawNDots('jProg', JB); jumpNext();
+}
+function jumpNext() {
+  nvoice.stop();
+  const my = ++JB.round; JB.tries = 0;
+  if (JB.n >= JB.queue.length) return jumpEnd();
+  Object.assign(JB, JB.queue[JB.n]); JB.total = JB.kind === 'on' ? JB.a + JB.b : JB.a - JB.b;
+  $('jTiles').textContent = '';
+  nvoice.preload(['j_bed_' + JB.a, 'j_on_' + JB.b, 'j_off_' + JB.b, 'j_how_many', 'm_count', 'p_right', 'p_yes', ...[...Array(10).keys()].map(i => NUM(i + 1))]);
+  jumpPlay(my);
+}
+function jumpWatch() {
+  if (JB.busy) return;
+  sound.unlock(); nvoice.stop(); jumpPlay(JB.round);
+}
+function jumpAnswer(btn, v) {
+  if (JB.busy || btn.classList.contains('yes')) return;
+  sound.unlock();
+  const my = JB.round;
+  if (v === JB.total) {
+    JB.busy = true; btn.classList.add('yes'); sound.chime(); $('jScene').classList.add('happy'); $('jWatch').hidden = true;
+    [...$('jTiles').children].forEach(b => b !== btn && b.classList.add('dim'));
+    JB.res[JB.n] = JB.tries ? 'miss' : 'hit'; drawNDots('jProg', JB);
+    nvoice.say([NUM(v), praise()]).then(() => {
+      if (my !== JB.round) return;
+      lwait(700).then(() => { if (my === JB.round) { JB.n++; jumpNext(); } });
+    });
+  } else {
+    JB.tries++; JB.busy = true; btn.classList.remove('nope'); void btn.offsetWidth; btn.classList.add('nope');
+    jumpCount(my).then(ok => { if (!ok || my !== JB.round) return; JB.busy = false; nvoice.say(['j_how_many']); });
+  }
+}
+async function jumpCount(my) {      // "Let's count them": a number on each monster still on the bed
+  if (!await nvoice.say(['m_count'])) return false;
+  const mons = [...$('jMons').querySelectorAll('.jmon:not(.off)')]           // the front row left to right, then the back row
+    .sort((p, q) => (q.style.zIndex - p.style.zIndex) || (parseFloat(p.style.left) - parseFloat(q.style.left)));
+  for (let i = 0; i < mons.length; i++) {
+    if (my !== JB.round) return false;
+    if (!mons[i].classList.contains('done')) { mons[i].classList.add('done'); mons[i].lastChild.textContent = i + 1; sound.pop(); }
+    if (!await nvoice.say([NUM(i + 1)], 60)) return false;
+  }
+  return my === JB.round;
+}
+function jumpEnd() {
+  JB.busy = true; $('jSay').classList.remove('show');
+  ['jScene', 'jWatch', 'jTiles', 'jProg'].forEach(id => { $(id).hidden = true; });
+  const hits = JB.res.filter(r => r === 'hit').length;
+  $('jEndWord').textContent = hits === JB.queue.length ? 'All first go!' : 'Great counting!';
+  drawNDots('jEndDots', JB); $('jEnd').hidden = false;
+  sound.jingle(); nvoice.say(['p_great_counting'], 120, false);
+}
+function jumpLevel(key) {
+  JB.level = key; nstore.jump = key; nsave();
+  buildNLevels('jLevels', JB_LEVELS, JB.level, jumpLevel); newJumpRound();
+}
+async function openJump() {
+  show('jumpgame'); nvoice.target($('jSay'));
+  JB.level = JB_LEVELS.some(l => l.key === nstore.jump) ? nstore.jump : '1';
+  buildNLevels('jLevels', JB_LEVELS, JB.level, jumpLevel);
+  await nvoice.load();
+  if (!$('jumpgame').hidden) newJumpRound();
+}
+
 function stopNumbers() {
   nvoice.stop(); NC.round++; NC.busy = false; NQ.round++; NQ.busy = false; clearTimeout(NQ.timer);
-  FD.round++; FD.busy = false; MR.round++; MR.busy = false;
+  FD.round++; FD.busy = false; MR.round++; MR.busy = false; TR.round++; TR.busy = false; JB.round++; JB.busy = false;
 }
 function buildNumbers() {
   $('cAgain').addEventListener('click', () => { sound.unlock(); newCountRound(); });
@@ -1338,6 +1695,10 @@ function buildNumbers() {
   $('mR').addEventListener('click', () => moreTap(1));
   $('mQ').addEventListener('click', () => { sound.unlock(); if (!MR.busy) nvoice.say([mrAsk()], 120, false); });
   $('mAgain').addEventListener('click', () => { sound.unlock(); newMoreRound(); });
+  $('trScene').addEventListener('click', () => { sound.unlock(); if (!TR.busy) trainRead(TR.round); });
+  $('trAgain').addEventListener('click', () => { sound.unlock(); newTrainRound(); });
+  $('jWatch').addEventListener('click', jumpWatch);
+  $('jAgain').addEventListener('click', () => { sound.unlock(); newJumpRound(); });
 }
 
 // ------------------------------------------------------------- letters ----
@@ -1869,6 +2230,8 @@ function init() {
   $('playQuick').addEventListener('click', () => openGame('quickgame'));
   $('playFeed').addEventListener('click', () => openGame('feedgame'));
   $('playMore').addEventListener('click', () => openGame('moregame'));
+  $('playTrain').addEventListener('click', () => openGame('traingame'));
+  $('playJump').addEventListener('click', () => openGame('jumpgame'));
   buildLetters();
   buildNumbers();
   if (!lettersOK()) { $('playLetters').hidden = true; $('lettersHead').hidden = true; }
