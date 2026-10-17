@@ -15,23 +15,23 @@ Learning games for my daughter, starring the 30 monsters from her [Monster Book]
 - **Monster train.** A train pulls in with four numbered carriages, a monster peeking out of each, and one carriage empty. The narrator reads along as each carriage lights up; which number goes in the gap? A monster hops in and the train toots off. A wrong answer counts along to the gap. What comes next, then what's missing in the middle, then up to 20 with what comes before and counting down.
 - **Jump in the bed.** "Three monsters on the bed. Two more jump on!" How many on the bed now? The ones jumping on are a different monster, so the three and the two stay easy to see: adding, without calling it adding. On Tricky some roll off instead, which is taking away. A wrong answer counts the bed, a number on each monster, and Watch again tells the story again.
 
-**Letters**, on Sam's phone only:
+**Letters**, only in browsers set up with a private access link:
 
 - **Trace** shows a lowercase letter in NSW Foundation Style, the handwriting NSW schools teach, and a ghost finger draws it first. Then only the right start point, direction and stroke order count; the line gets stricter as she gets better.
 - **Spell** gives her a picture and letter tiles; each tile says its sound when she taps it, and a finished word is sounded out ("f… o… x… fox!").
 - **Sounds** plays a letter sound and she taps the letter that makes it: three letters that are hard to mix up, or four with one near miss (b or d?).
 - **First sound** shows a picture, says the word, and she taps the letter it starts with.
 
-Each game has its own link (`/#count`, `/#quick`, `/#feed`, `/#more`, `/#train`, `/#jump`, and `/#letters` on Sam's phone).
+Each game has its own link (`/#count`, `/#quick`, `/#feed`, `/#more`, `/#train`, `/#jump`, and `/#letters` where Letters is set up).
 
 ## How it's built
 
-It's one HTML file, like the Monster Book's site: no framework, no build step, no server, no accounts, no analytics. Hosting is Cloudflare Pages on the free plan.
+It's one HTML file, like the Monster Book's site: no framework, no bundler, no accounts, no analytics. Hosting is Cloudflare Pages on the free plan.
 
 - **Two kinds of voice.** Letters uses her parents' recorded voices: her mum says the letter sounds and her dad says everything else. Numbers has a narrator made with text-to-speech, one Australian teacher's voice from Google's library. Number words are whole words, which text-to-speech does well. A letter's sound on its own (a short "b", nothing after it) came out as "bee" or "buh" in every voice we tried, and that extra "uh" is exactly what teachers train out, so those had to be recorded by a person. Every sound goes through the page's own audio, so one mute button covers everything, and a missing clip falls back to the browser's voice or to words on screen.
-- **Letters is locked to one phone.** It has her parents' voices and her family's pictures, which are for her, not for everyone with the link. Cloudflare Pages runs a small script in front of the site (`tools/_worker_src.js`, deployed as `_worker.js`). Unless a browser has a pass, it answers 404 for anything under `letters/`, and the page hides the Letters tile. The pass comes from opening a secret link once on her phone: a cookie that lasts 400 days, renewed every time she plays. The key isn't in this repo.
-- **It used to live inside the Monster Book's site.** When it moved out, her saved progress (which letters she has traced, the levels she picked) was on the old site, and a browser only lets a site read its own saved data. So the first time the Learning Lab opens on her phone, it hops once to the monster site, which hands the progress back in the address. The hop happens only for her copy, and the import never overwrites anything already here (`tools/test_carry.py`).
-- **What she does stays on her phone.** Progress and levels are kept in the browser's own storage. Nothing is sent anywhere.
+- **Letters is restricted to browsers set up with a private access link.** It has her parents' voices and the family's pictures, which are for the family, not for everyone with the site's address. Cloudflare Pages runs a small script in front of the site (`tools/_worker_src.js`, deployed as `_worker.js`). Unless a browser has a pass, it answers 404 for anything under `letters/`, and the page hides the Letters tile. The pass comes from opening the private access link once in that browser: a cookie that lasts 400 days, renewed every time she plays. The family words (and the picture for her name) load only in a browser with the pass; the name itself comes from the display name, never from the code. The key isn't in this repo. The link is kept private, and if it ever got out, the key would be replaced, which turns off the old link and every pass made with it.
+- **It used to live inside the Monster Book's site.** When it moved out, her saved progress (which letters she has traced, the levels she picked) was on the old site, and a browser only lets a site read its own saved data. So the first time the Learning Lab opens in a browser with the Letters pass, it hops once to the monster site, which hands the progress back in the address. The hop happens only in a browser with the pass, and the import never overwrites anything already here (`tools/test_carry.py`).
+- **Privacy.** Progress, levels and settings stay in this browser. The display name is included in personalised links between the sites (`?for=Name`), so the hosting service receives it when those links are opened. The one-time move of old progress is different: the progress travels in the part of the address after `#`, which the browser doesn't send to a server. The page also loads its two fonts from Google Fonts.
 - **Not meant for search.** A `noindex` tag asks search engines not to list it.
 
 ## What's in this repo
@@ -39,10 +39,10 @@ It's one HTML file, like the Monster Book's site: no framework, no build step, n
 | Path | What it is |
 |---|---|
 | `index.html` | The whole site: markup, styles and script in one file |
-| `tools/build_site.py` | Wraps the working page for hosting and builds the lock with its key |
+| `tools/build_site.py` | Wraps the working page for hosting and builds the lock with its key. It reads `site/app.html`, the preview copy, which isn't in this repo, so it can't run from a fresh clone; `index.html` is its output and is the page that's deployed |
 | `tools/_worker_src.js` | The Letters lock (the key is filled in at build time and isn't in the repo) |
 | `tools/test_worker.mjs` | Tests the lock with fake requests: blocked without a pass (including disguised addresses), the secret link, renewing the pass, and `?letters=off` |
-| `tools/test_letters.py` | Traces every letter a to z the way a finger would, then tries the wrong start, the wrong direction and going off the line; spells every level, including a name; plays Sounds and First sound at both levels; checks phones, a folding phone and a laptop, and that a device without the pass gets no Letters |
+| `tools/test_letters.py` | Traces every letter a to z the way a finger would, then tries the wrong start, the wrong direction and going off the line; spells every level, including a name; plays Sounds and First sound at both levels; checks phones, a folding phone and a laptop; that a browser without the pass gets no Letters and never asks for the family words; and that a copy without the family file has none |
 | `tools/test_numbers.py` | Plays all six Numbers games: counting, counting twice, wrong and right answers, peeking, too few and too many cookies, one more and one less, more and fewer, what comes next and before, counting down, jumping on and rolling off, full rounds at every level; every layout at four screen sizes with no monster overlapping or cut off, and the jar and Feed button on the first screen; the narrator's clips, the browser-voice fallback and mute; and the voice maker against a fake API, including Google's daily limit |
 | `tools/test_carry.py` | The one-time move of her progress from the monster site, with both sites served under their real addresses inside the test browser |
 | `tools/letters/` | The Letters tools: tracing paths from the font, the word list, a recording page, and the picture and voice tools ([its own README](tools/letters/README.md)) |

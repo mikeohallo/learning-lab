@@ -1,17 +1,23 @@
 """Wrap the page (app.html, written for the Claude preview) into a standalone index.html for hosting, and build the
-Letters lock (_worker.js) with the key from learn_key.txt."""
-import secrets
+Letters lock (_worker.js) with the key from learn_key.txt.
+
+site/app.html isn't in this repo, so this script can't run from a fresh clone. It's the preview copy, kept off GitHub
+because it has a name built in; the built index.html in the repo is the page that's deployed. The page part of
+index.html is app.html with only the four sub1() changes below, wrapped in a standard <head>."""
+import re, secrets
 from pathlib import Path
 site = Path(__file__).resolve().parent.parent / 'site'
 body = (site / 'app.html').read_text(encoding='utf-8')
-# the hosted site is for everyone: the plain link says "My Learning Lab"; gift links add ?for=Name
-assert "const DEFAULT_OWNER = 'Sam';" in body
-body = body.replace("const DEFAULT_OWNER = 'Sam';", "const DEFAULT_OWNER = '';", 1)
-# Letters only for devices with the pass (see tools/_worker_src.js)
-assert "const LETTERS_GATED = false;" in body
-body = body.replace("const LETTERS_GATED = false;", "const LETTERS_GATED = true;", 1)
-body = body.replace("<title>Sam's Learning Lab</title>", "<title>My Learning Lab</title>", 1)
-body = body.replace('aria-label="Sam\'s Learning Lab"', 'aria-label="My Learning Lab"', 1)
+def sub1(pattern, repl):   # exactly one match, or stop
+    global body
+    body, n = re.subn(pattern, lambda m: repl, body, count=1)
+    assert n == 1, pattern
+# the hosted site is for everyone: no name built in, so the plain link says "My Learning Lab"; links add ?for=Name
+sub1(r"const DEFAULT_OWNER = '[^'\n]*';", "const DEFAULT_OWNER = '';")
+# Letters only for browsers with the pass (see tools/_worker_src.js)
+sub1(r"const LETTERS_GATED = false;", "const LETTERS_GATED = true;")
+sub1(r"<title>[^<\n]*Learning Lab</title>", "<title>My Learning Lab</title>")
+sub1(r'aria-label="[^"\n]*Learning Lab"', 'aria-label="My Learning Lab"')
 SITE_URL = 'https://learn.mikeohalloran.au'
 head_end = body.index('<style>')
 head, rest = body[:head_end], body[head_end:]

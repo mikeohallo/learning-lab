@@ -1,4 +1,5 @@
-"""The one-time hand-over of Sam's progress from the monster site, where Letters and Numbers used to live.
+"""The one-time hand-over of the family's progress from the monster site, where Letters and Numbers used to live.
+It only happens in a family browser (one with the Letters pass); the name used here, Sam, is made up.
 Both sites are served under their real addresses inside the test browser (nothing goes online).
     python3 tools/test_carry.py MONSTER_SITE_DIR"""
 import json, mimetypes, sys
@@ -24,13 +25,13 @@ def serve(root):
 
 with sync_playwright() as pw:
     b = pw.chromium.launch()
-    def fresh():
+    def fresh(passed=True):
         ctx = b.new_context(viewport={'width': 390, 'height': 844})
         ctx.route('https://fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=''))
         ctx.route('https://fonts.gstatic.com/**', lambda r: r.abort())
         ctx.route('https://learn.mikeohalloran.au/**', serve(LEARN))
         ctx.route('https://monsters.mikeohalloran.au/**', serve(MONSTER))
-        ctx.add_cookies([{'name': 'mb_letters_ok', 'value': '1', 'domain': 'learn.mikeohalloran.au', 'path': '/'}])
+        if passed: ctx.add_cookies([{'name': 'mb_letters_ok', 'value': '1', 'domain': 'learn.mikeohalloran.au', 'path': '/'}])
         p = ctx.new_page(); trail = []
         def nav(f):   # page loads only: the address being tidied up afterwards (same page, same site) isn't a hop
             if f != p.main_frame: return
@@ -41,7 +42,7 @@ with sync_playwright() as pw:
         return ctx, p, trail
     ls = lambda p, k: p.evaluate(f"localStorage.getItem('{k}')")
 
-    # Sam's phone: progress saved on the monster site from before
+    # the family's phone: progress saved on the monster site from before
     ctx, p, trail = fresh()
     p.goto('https://monsters.mikeohalloran.au/?for=Sam'); p.wait_for_timeout(400)
     p.evaluate("""localStorage.setItem('monster-book.letters', JSON.stringify({ traced: { a: 1, b: 1, c: 1 }, next: 'd', mode: 'spell', level: '2', hlevel: '2' }));
@@ -52,7 +53,7 @@ with sync_playwright() as pw:
     p.wait_for_function("location.hostname === 'learn.mikeohalloran.au' && !location.hash.startsWith('#import') && document.readyState === 'complete' && typeof LS !== 'undefined'", timeout=8000)
     p.wait_for_timeout(500)
     hops = [urlparse(u).hostname + (urlparse(u).query and '?' + urlparse(u).query) for u in trail]
-    check(f'first visit on Sam\'s phone: one hop to the monster site and back ({" -> ".join(hops)})',
+    check(f'first visit on the family\'s phone: one hop to the monster site and back ({" -> ".join(hops)})',
           len(trail) == 3 and 'monsters.mikeohalloran.au/?handoff=learn' in trail[1] and trail[2].startswith('https://learn.mikeohalloran.au/?for=Sam'))
     lt = json.loads(ls(p, 'learning-lab.letters') or '{}')
     check(f'her Letters progress came across (next letter {lt.get("next")}, {len(lt.get("traced", {}))} traced, mode {lt.get("mode")})', lt.get('next') == 'd' and len(lt.get('traced', {})) == 3 and lt.get('mode') == 'spell')
@@ -66,13 +67,13 @@ with sync_playwright() as pw:
     check('an import never overwrites what\'s there, and ignores nonsense', json.loads(ls(p, 'learning-lab.letters'))['next'] == 'd' and ls(p, 'learning-lab.sound') == 'off')
     ctx.close()
 
-    # someone else's device: no hop
-    ctx, p, trail = fresh()
+    # someone else's browser (no pass): no hop, whatever the name
+    ctx, p, trail = fresh(passed=False)
     p.goto('https://learn.mikeohalloran.au/?for=Max'); p.wait_for_timeout(800)
-    check('a gift copy (?for=Max) never hops to the monster site', all(urlparse(u).hostname == 'learn.mikeohalloran.au' for u in trail) and p.is_visible('#home'))
+    check('a browser without the pass (?for=Max) never hops to the monster site', all(urlparse(u).hostname == 'learn.mikeohalloran.au' for u in trail) and p.is_visible('#home'))
     ctx.close()
 
-    # Sam's phone with nothing saved on the monster site: one hop, nothing breaks
+    # the family's phone with nothing saved on the monster site: one hop, nothing breaks
     ctx, p, trail = fresh()
     p.goto('https://learn.mikeohalloran.au/?for=Sam', wait_until='commit')
     p.wait_for_function("location.hostname === 'learn.mikeohalloran.au' && !location.hash.startsWith('#import') && document.readyState === 'complete'", timeout=8000)

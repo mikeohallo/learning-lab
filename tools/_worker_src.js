@@ -1,7 +1,7 @@
 // Cloudflare Pages runs this in front of every request (a _worker.js in the upload folder).
-// Everything is passed straight through, except the Letters game's files (/letters/...): those only go to a device
-// that has opened the secret link once,
-//     https://learn.mikeohalloran.au/?for=Sam&letters=<key>
+// Everything is passed straight through, except the Letters game's files (/letters/...): those only go to a browser
+// that has opened the private access link once,
+//     https://learn.mikeohalloran.au/?for=<name>&letters=<key>
 // which gives that browser a pass for 400 days (renewed on every visit). ?letters=off takes the pass away.
 // The page hides the Letters tile unless the pass is there (mb_letters_ok). The key is filled in by build_site.py
 // from learn_key.txt, which stays on the laptop and out of the repo.

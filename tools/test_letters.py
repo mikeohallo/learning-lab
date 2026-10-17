@@ -18,6 +18,7 @@ css = ("@font-face{font-family:'Fredoka';font-weight:300 700;src:url(http://127.
 problems = []
 FAM_FILE = SITE / 'letters' / 'family.json'                # private: on the family's copy only, not in the repo
 FAM_IDS = set(json.loads(FAM_FILE.read_text())['words']) if FAM_FILE.exists() else set()
+KID = 'Sam'   # the name used for the family browser here (family words follow the pass, never a name)
 def check(label, ok):
     print(('ok   ' if ok else 'FAIL ') + label)
     if not ok: problems.append(label)
@@ -41,7 +42,8 @@ def page_at(b, w, h, touch=True, voices=False, passed=True):
         ctx.route('**/letters/voices/index.json', lambda r: r.fulfill(status=200, content_type='application/json', body='{"mum":[],"dad":[]}'))
     # voices == 'real': the recorded clips in site/letters/voices
     p = ctx.new_page()
-    p.on('console', lambda m: m.type == 'error' and problems.append(f'console error: {m.text}'))
+    # a copy with no family file gets one 404 for it, and that's expected
+    p.on('console', lambda m: m.type == 'error' and 'family.json' not in (m.location or {}).get('url', '') and problems.append(f'console error: {m.text}'))
     p.on('pageerror', lambda e: problems.append(f'page error: {e}'))
     return ctx, p
 
@@ -71,9 +73,9 @@ def trace_letter(p, ch):
 
 with sync_playwright() as pw:
     b = pw.chromium.launch()
-    # ---------------------------------------------------------------- phone, Sam's device
+    # ---------------------------------------------------------------- phone, a family browser (it has the pass)
     ctx, p = page_at(b, 390, 844, voices=True)
-    p.goto(BASE + '?for=Sam'); p.wait_for_timeout(700)
+    p.goto(BASE + f'?for={KID}'); p.wait_for_timeout(700)
     check('the Learning Lab opens on its games: 7, Letters among them', p.eval_on_selector_all('.gametile', 'e => e.length') == 7 and p.is_visible('#playLetters') and p.is_visible('#home'))
     p.click('#playLetters'); p.wait_for_timeout(400)
     check('Letters tile opens #letters on Trace', p.evaluate('location.hash') == '#letters' and p.is_visible('#traceBox') and not p.is_visible('#spellBox'))
@@ -133,14 +135,14 @@ with sync_playwright() as pw:
     # every letter, a to z, traced the way a finger would
     failed = [ch for ch in 'abcdefghijklmnopqrstuvwxyz' if not trace_letter(p, ch)]
     check(f'all 26 letters can be traced start to finish{": failed " + str(failed) if failed else ""}', not failed)
-    # Sam's pictures: family words
+    # the family's pictures: family words
     p.evaluate('setLetter("d")'); skip_demo(p)
-    check(f'on Sam\'s device, d is for Dad ({p.get_attribute("#tPic img", "src")})', p.get_attribute('#tPic img', 'src').endswith('letters/fam/dad.webp') and p.text_content('#tWord') == 'Dad')
+    check(f'in a family browser, d is for Dad ({p.get_attribute("#tPic img", "src")})', p.get_attribute('#tPic img', 'src').endswith('letters/fam/dad.webp') and p.text_content('#tWord') == 'Dad')
     p.click('#tPickOpen'); p.click('#tPick button[data-ch="x"]'); skip_demo(p)
     check('the letter picker jumps to x (box, with the x at the end)', p.evaluate('LT.ch') == 'x' and p.inner_html('#tWord') == 'bo<b>x</b>')
     # ---------------------------------------------------------------- spell
     p.click('#lmSpell'); p.wait_for_timeout(300)
-    check('Spell shows 4 levels on Sam\'s device (with My name)', p.eval_on_selector_all('#sLevels .level', 'e => e.length') == 4)
+    check('Spell shows 4 levels (with My name)', p.eval_on_selector_all('#sLevels .level', 'e => e.length') == 4)
     def spell_word(right=True):
         letters = p.evaluate('LS.letters')
         for c in letters:
@@ -165,14 +167,14 @@ with sync_playwright() as pw:
         p.click('#sNext'); p.wait_for_timeout(200)
         check(f'level {lvl + 1}: Next word gives a different word', p.evaluate('LS.filled') == 0)
     p.click('#sLevels .level >> nth=3'); p.wait_for_timeout(300)
-    check('My name: E-l-l-i-e with the letters showing', p.evaluate("LS.letters.join('')") == 'Sam' and p.evaluate("[...document.querySelectorAll('#sSlots .slot')].map(s => s.textContent).join('')") == 'Sam')
+    check(f'My name: {"-".join(KID)} with the letters showing', p.evaluate("LS.letters.join('')") == KID and p.evaluate("[...document.querySelectorAll('#sSlots .slot')].map(s => s.textContent).join('')") == KID)
     spell_word(); p.wait_for_function("!$('sNext').hidden", timeout=15000)
-    check('My name spelled', p.evaluate('LS.filled') == 5)
+    check('My name spelled', p.evaluate('LS.filled') == len(KID))
     p.screenshot(path=OUT / 'l5_name.png')
     # leaving stops everything
     p.click('#lettergame [data-go="home"]'); p.wait_for_timeout(200)
     check('leaving Letters stops the voice and the demo', not p.evaluate('LT.demoing') and p.evaluate('LS.busy') in (False, None))
-    p.goto(BASE + '?for=Sam#letters'); p.wait_for_timeout(500)
+    p.goto(BASE + f'?for={KID}#letters'); p.wait_for_timeout(500)
     check('it remembers the mode (opens on Spell again)', p.is_visible('#spellBox'))
 
     # ---------------------------------------------------------------- sound hunt and first sounds
@@ -222,10 +224,10 @@ with sync_playwright() as pw:
     firsts = [w[0].lower() for w in q]
     check(f'First sound: 10 words with 10 different first letters, none on x ({", ".join(q)})', len(q) == 10 and len(set(firsts)) == 10 and 'x' not in firsts)
     check('First sound: the answer is the word\'s first letter', p.evaluate("LH.target === LH.word.text[0].toLowerCase()"))
-    pool = p.evaluate("Object.keys(LETTER_DATA.words).filter(w => isSam() || !LETTER_DATA.words[w].pic.startsWith('family:'))")
-    check('First sound on Sam\'s phone can use the family words', not FAM_IDS or FAM_IDS <= set(pool))
+    pool = p.evaluate("Object.keys(LETTER_DATA.words).filter(w => familyDevice() || !LETTER_DATA.words[w].pic.startsWith('family:'))")
+    check('First sound in a family browser can use the family words', not FAM_IDS or FAM_IDS <= set(pool))
     play_round('First sound', first_wrong=False)
-    p.goto(BASE + '?for=Sam&again=1#letters'); p.wait_for_function("!$('huntBox').hidden && LH.queue.length === 10", timeout=8000)
+    p.goto(BASE + f'?for={KID}&again=1#letters'); p.wait_for_function("!$('huntBox').hidden && LH.queue.length === 10", timeout=8000)
     check('it remembers the mode (opens on First sound again)', p.is_visible('#huntBox') and p.is_visible('#hPic'))
     p.screenshot(path=OUT / 'l9_first.png')
     ctx.close()
@@ -236,13 +238,17 @@ with sync_playwright() as pw:
     check('without the pass: the Letters tile and heading are hidden, Numbers is there', not p.is_visible('#playLetters') and not p.is_visible('#lettersHead') and p.is_visible('#playCount'))
     p.goto(BASE + '?for=Max#letters'); p.wait_for_timeout(400)
     check('without the pass: #letters opens the Learning Lab\'s games instead', p.is_visible('#home') and not p.is_visible('#lettergame'))
+    reqs = []
+    p.on('request', lambda r: '/letters/' in r.url and reqs.append(r.url))
+    p.evaluate('loadFamily()'); p.wait_for_timeout(300)
+    check('without the pass: the family words are never asked for, whatever the name', not reqs and p.evaluate('FAMILY') is None and not p.evaluate('famOn()'))
     ctx.close()
 
     # ---------------------------------------------------------------- the real recordings
     vi = Path(SITE / 'letters' / 'voices' / 'index.json')
     if vi.exists() and any(json.loads(vi.read_text()).values()):
         ctx, p = page_at(b, 390, 844, voices='real')
-        p.goto(BASE + '?for=Sam#letters'); p.wait_for_timeout(500); skip_demo(p)
+        p.goto(BASE + f'?for={KID}#letters'); p.wait_for_timeout(500); skip_demo(p)
         idx = json.loads(vi.read_text())
         tools = SITE.parent / 'letters'
         all_ids = []
@@ -263,13 +269,14 @@ with sync_playwright() as pw:
         check(f'real voices: a Dad round plays Mum\'s "f" then Dad\'s "fox" ({dec[1]:.0f} ms)', dec[0] and dec[1] > 600)
         ctx.close()
 
-    # ---------------------------------------------------------------- a gift copy: no family pictures or words
+    # ---------------------------------------------------------------- a gift copy (no family file on its site): no family pictures or words
     page_src = (SITE / 'index.html').read_text(encoding='utf-8')
     fam = SITE / 'letters' / 'family.json'
     fam_words = [w['text'] for w in json.loads(fam.read_text())['words'].values()] if fam.exists() else []
     check('the page itself carries no family words (they load from letters/family.json, behind the lock)',
-          not [t for t in fam_words if t in page_src and t not in ('Mum', 'Dad', 'Sam')] and '"family:' not in page_src)
+          not [t for t in fam_words if t in page_src and t not in ('Mum', 'Dad')] and '"family:' not in page_src)
     ctx, p = page_at(b, 390, 844)
+    ctx.route('**/letters/family.json', lambda r: r.fulfill(status=404, body='not found'))
     fam_reqs = []
     p.on('request', lambda r: 'family.json' in r.url and fam_reqs.append(r.url))
     p.goto(BASE + '?for=Max#letters'); p.wait_for_timeout(500); skip_demo(p)
@@ -280,21 +287,37 @@ with sync_playwright() as pw:
     no_fam = not set(gq) & FAM_IDS and not p.evaluate("LH.queue.some(w => LETTER_DATA.words[w].pic.startsWith('family:'))")
     check(f'a gift copy\'s First sound has no family words ({", ".join(gq)})', no_fam and len(gq) == 10)
     p.evaluate("letterMode('trace')"); p.wait_for_timeout(200)
-    check('a gift copy never asks for the family words', not fam_reqs)
-    check(f'for Max, d is for dragon (not Sam\'s dad)', 'faces/F24' in p.get_attribute('#tPic img', 'src') and p.text_content('#tWord') == 'dragon')
+    check(f'a gift copy asks for the family file at most once, finds none and carries on ({len(fam_reqs)} asks)', len(fam_reqs) <= 1 and p.evaluate('FAMILY') is False)
+    check(f'for Max, d is for dragon (not Dad)', 'faces/F24' in p.get_attribute('#tPic img', 'src') and p.text_content('#tWord') == 'dragon')
     p.evaluate('setLetter("p")'); skip_demo(p)
     check('for Max, p is for penguin', p.text_content('#tWord') == 'penguin')
     p.click('#lmSpell'); p.wait_for_timeout(300)
     pool = p.evaluate("(() => { const seen = new Set(); for (let i = 0; i < 60; i++) { LS.level = '1'; seen.add(pickWord().id); } return [...seen]; })()")
     check(f'for Max, no Mum or Dad words in spelling ({len(pool)} words seen)', 'mum' not in pool and 'dad' not in pool)
     p.click('#sLevels .level >> nth=3'); p.wait_for_timeout(300)
-    check('My name for Max: M-a-x', p.evaluate("LS.letters.join('')") == 'Max')
+    check('My name for Max: M-a-x, with no family picture', p.evaluate("LS.letters.join('')") == 'Max' and p.evaluate('LS.word.pic') is None)
     ctx.close()
+
+    # ---------------------------------------------------------------- My name's picture comes from the family words, not the code
+    # a stand-in family file with one made-up name, so the real names stay out of this test
+    stand_in = {'letters': {}, 'words': {'sam': {'text': 'Sam', 'pic': 'family:sam'}}, 'spell': {}}
+    face = (SITE / 'faces' / 'F01.webp').read_bytes()
+    for who, want in (('Sam', 'family:sam'), ('Max', None)):
+        ctx, p = page_at(b, 390, 844)
+        ctx.route('**/letters/family.json', lambda r: r.fulfill(status=200, content_type='application/json', body=json.dumps(stand_in)))
+        ctx.route('**/letters/fam/*.webp', lambda r: r.fulfill(status=200, content_type='image/webp', body=face))
+        p.goto(BASE + f'?for={who}#letters'); p.wait_for_timeout(500); skip_demo(p)
+        p.click('#lmSpell'); p.wait_for_timeout(300)
+        p.click('#sLevels .level >> nth=3'); p.wait_for_timeout(300)
+        src = p.get_attribute('#sPic img', 'src')
+        check(f'My name for {who}: picture {p.evaluate("LS.word.pic")} ({src})', p.evaluate('LS.word.pic') == want
+              and (src.endswith('letters/fam/sam.webp') if want else src.endswith('faces/F01.webp')))
+        ctx.close()
 
     # ---------------------------------------------------------------- other sizes
     for (w, h, touch, label) in ((360, 740, True, 'small phone'), (904, 1000, True, 'folding phone open'), (1280, 800, False, 'laptop')):
         ctx, p = page_at(b, w, h, touch)
-        p.goto(BASE + '?for=Sam#letters'); p.wait_for_timeout(900); skip_demo(p)
+        p.goto(BASE + f'?for={KID}#letters'); p.wait_for_timeout(900); skip_demo(p)
         check(f'{label} {w}px: no sideways scroll', not p.evaluate('document.documentElement.scrollWidth > innerWidth'))
         r = p.locator('#tSvg').bounding_box()
         check(f'{label}: the tracing area is on screen ({r["y"]:.0f}-{r["y"] + r["height"]:.0f} of {h}, {r["width"]:.0f} wide)', r['y'] >= 0 and r['y'] + r['height'] <= h + 1)

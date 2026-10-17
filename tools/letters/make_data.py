@@ -1,6 +1,6 @@
 """The Letters game's word list, sounds, prompts and pictures, in one place.
 Writes letters_data.json (everyone's words), which the recorder, the picture runner and the game all read.
-Family words (Sam's devices only) come from family_words.py, which is private and not in the repo; when it is
+Family words (family browsers only) come from family_words.py, which is private and not in the repo; when it is
 there, they go to letters_family.json, which the game loads from behind the Letters lock."""
 import json
 from pathlib import Path

@@ -1,6 +1,7 @@
 """Paste the tracing paths and everyone's word list into the site's page (site/app.html), between the
 /*LETTERS:paths*/ ... /*END*/ and /*LETTERS:data*/ ... /*END*/ markers, and put the family words (if any) in
-site/letters/family.json, behind the Letters lock, where only Sam's devices load them from."""
+site/letters/family.json, behind the Letters lock, where only family browsers (set up with the
+private access link) load them from."""
 import json, re
 from pathlib import Path
 HERE = Path(__file__).resolve().parent

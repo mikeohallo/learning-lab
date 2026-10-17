@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)} body{margin:0} img{max-width:100%}</style>
 <style>
-/* Layout: one phone-first column, the same cream page, fonts and colours as Sam's Monster Book. */
+/* Layout: one phone-first column, the same cream page, fonts and colours as the Monster Book. */
 :root {
   --paper: #FFF8EC;
   --paper-deep: #F6EBD6;
@@ -584,7 +584,7 @@ button { cursor: pointer; }
 <script>
 // ---------------------------------------------------------------- data ----
 // The Learning Lab: Letters (tracing, spelling, letter sounds) and Numbers (counting and comparing games), with the monsters from
-// Sam's Monster Book as the characters. It used to be part of monsters.mikeohalloran.au.
+// the Monster Book as the characters. It used to be part of monsters.mikeohalloran.au.
 const DEFAULT_OWNER = '';   // gift copies: change this, or link with ?for=Name
 // The hosted build sets this to true: then the Letters game only shows on a device that has opened the secret
 // link once (_worker.js gives it a pass cookie and blocks letters/ for everyone else). The preview always shows it.
@@ -617,9 +617,10 @@ function toast(msg) {
 }
 
 // ------------------------------------------------------------- carry-over --
-// Before the Learning Lab had its own site, Sam's Letters and Numbers progress was saved on the monster site, and
-// only a page from that site can read it. So the first time this site opens on one of her devices, it hops there
-// once (monsters.mikeohalloran.au/?handoff=learn), and that page sends the progress straight back in the address.
+// Before the Learning Lab had its own site, the family's Letters and Numbers progress was saved on the monster site,
+// and only a page from that site can read it. So the first time this site opens in a family browser (one set up with
+// the private access link), it hops there once (monsters.mikeohalloran.au/?handoff=learn), and that page sends the
+// progress straight back in the address.
 const CARRY = { letters: 'learning-lab.letters', numbers: 'learning-lab.numbers', sound: 'learning-lab.sound' };
 function carryOver() {           // true if the page is about to hop away
   try {
@@ -639,7 +640,7 @@ function carryOver() {           // true if the page is about to hop away
       history.replaceState(null, '', location.pathname + location.search + to);
       return false;
     }
-    if (location.hostname !== 'learn.mikeohalloran.au' || ownerName().toLowerCase() !== 'sam') return false;
+    if (location.hostname !== 'learn.mikeohalloran.au' || !lettersOK()) return false;
     if (localStorage.getItem('learning-lab.carried') || localStorage.getItem(CARRY.letters) !== null) return false;
     localStorage.setItem('learning-lab.carried', '1');      // only ever once, even if the hop fails
     const u = new URL('https://monsters.mikeohalloran.au/');
@@ -1711,23 +1712,25 @@ const LXH = 416, LTOP = 805, LBOT = -385, LW = 1000;
 const LCOLS = ['#F7D96B', '#9ED3F5', '#F7B8D6', '#B8E39A', '#FFC48A', '#D3C2F2'];
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const lwait = ms => new Promise(r => setTimeout(r, ms));
-const isSam = () => ownerName().toLowerCase() === 'sam';
+const familyDevice = () => lettersOK();   // the family's own browser: set up once with the private access link
 const lstore = (() => { let v = {}; try { v = JSON.parse(localStorage.getItem('learning-lab.letters') || '{}'); } catch (e) {} return Object.assign({ traced: {}, next: 'a', mode: 'trace', level: '1' }, v); })();
 function lsave() { try { localStorage.setItem('learning-lab.letters', JSON.stringify(lstore)); } catch (e) {} }
 function picURL(pic) {
   const [kind, id] = pic.split(':');
   return kind === 'face' ? `faces/F${id}.webp` : kind === 'family' ? `letters/fam/${id}.webp` : `letters/pics/${id}.webp`;
 }
-// Sam's family words (her own pictures and people) aren't in this page: they're in letters/family.json, behind
-// the Letters lock, and only load when the book is Sam's. Everyone else gets the everyone words.
+// The family words (the family's own pictures and people) aren't in this page: they're in letters/family.json, behind
+// the Letters lock, and only load in a browser set up with the private access link. Everyone else gets the everyone words.
 let FAMILY = null;
 async function loadFamily() {
-  if (FAMILY !== null || !isSam()) return;
+  if (FAMILY !== null || !familyDevice()) return;
   try { const r = await fetch('letters/family.json', { cache: 'no-cache' }); FAMILY = r.ok ? await r.json() : false; }
   catch (e) { FAMILY = false; }
   if (FAMILY) { Object.assign(LETTER_DATA.words, FAMILY.words); LS.queues = {}; }
 }
-const famOn = () => !!(FAMILY && isSam());
+const famOn = () => !!(FAMILY && familyDevice());
+// "My name" gets a picture when the name is one of the family words (the name itself only ever comes from the owner name)
+const meWord = () => { const n = ownerName().toLowerCase(); return famOn() && LETTER_DATA.words[n] && LETTER_DATA.words[n].pic.startsWith('family:') ? n : null; };
 function letterWord(ch) {          // a letter's picture word
   const w = (famOn() && FAMILY.letters[ch]) || LETTER_DATA.letters[ch].word;
   return { id: w, ...LETTER_DATA.words[w] };
@@ -1997,10 +2000,10 @@ function buildSpellLevels() {
   });
 }
 function pickWord() {
-  if (LS.level === 'name') return { id: isSam() ? 'sam' : null, text: nameLetters(), pic: isSam() ? 'family:sam' : null, name: true };
+  if (LS.level === 'name') { const me = meWord(); return { id: me, text: nameLetters(), pic: me ? LETTER_DATA.words[me].pic : null, name: true }; }
   const lv = l => [...(LETTER_DATA.spell[l] || []), ...(famOn() && FAMILY.spell[l] || [])];
   let pool = LS.level === '3' ? [...lv('1'), ...lv('2')] : lv(LS.level);
-  if (!isSam()) pool = pool.filter(w => !LETTER_DATA.words[w].pic.startsWith('family:'));
+  if (!familyDevice()) pool = pool.filter(w => !LETTER_DATA.words[w].pic.startsWith('family:'));
   let q = LS.queues[LS.level];
   if (!q || !q.length) { q = LS.queues[LS.level] = shuffleArr([...pool]); if (q[q.length - 1] === LS.last && q.length > 1) [q[0], q[q.length - 1]] = [q[q.length - 1], q[0]]; }
   const w = q.pop(); LS.last = w;
@@ -2112,7 +2115,7 @@ function newHuntRound() {
   LH.n = 0; LH.res = []; $('hEnd').hidden = true; $('hTiles').hidden = false; $('hDots').hidden = false; $('huntBox').classList.remove('ended');
   if (LH.mode === 'hunt') LH.queue = shuffleArr('abcdefghijklmnopqrstuvwxyz'.split('')).slice(0, LH_ROUND);
   else {
-    const words = Object.keys(LETTER_DATA.words).filter(w => isSam() || !LETTER_DATA.words[w].pic.startsWith('family:'));
+    const words = Object.keys(LETTER_DATA.words).filter(w => familyDevice() || !LETTER_DATA.words[w].pic.startsWith('family:'));
     const seen = new Set(); LH.queue = [];
     for (const w of shuffleArr(words)) {
       const c = LETTER_DATA.words[w].text[0].toLowerCase();

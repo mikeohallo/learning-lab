@@ -23,7 +23,7 @@ let r = await go('/'); check('home page loads without a pass', r.status === 200 
 r = await go('/faces/F01.webp'); check('pictures load without a pass', r.status === 200);
 r = await go('/letters/voices/index.json'); check('letters/ blocked without a pass (404)', r.status === 404);
 r = await go('/letters/voices/mum/sound_a.mp3'); check('a voice clip blocked without a pass', r.status === 404);
-r = await go('/letters/fam/sam.webp'); check('family portrait blocked without a pass', r.status === 404);
+r = await go('/letters/fam/mum.webp'); check('family portrait blocked without a pass', r.status === 404);
 r = await go('/letters/voices/index.json', 'mb_letters_ok=1'); check('the page flag alone is not a pass', r.status === 404);
 r = await go('/letters/voices/index.json', 'mb_letters=wrongkey123456789012'); check('a wrong key is not a pass', r.status === 404);
 r = await go('/?for=Sam&letters=nope'); check('wrong link: redirect, no pass', r.status === 302 && !r.headers.get('Set-Cookie') && r.headers.get('Location') === '/?for=Sam');
