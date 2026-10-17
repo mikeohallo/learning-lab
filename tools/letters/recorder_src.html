@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Letters game: voice recorder</title>
+<style>
+:root { --paper: #FFF8EC; --card: #fff; --ink: #3A2852; --soft: #6E5C86; --line: #E4D9EC; --pink: #EC6AA8; --green: #4FA83A; --blue: #54A6E2; --red: #E2453C; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.45 'Segoe UI', system-ui, sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 22px 18px 60px; }
+h1 { margin: 0 0 4px; font-size: 28px; }
+.lede { margin: 0 0 18px; color: var(--soft); }
+.card { background: var(--card); border-radius: 18px; padding: 18px 20px; box-shadow: 0 2px 0 rgba(58,40,82,.08), 0 10px 24px rgba(58,40,82,.10); margin-bottom: 16px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+button { font: inherit; font-weight: 700; border: 0; border-radius: 14px; padding: 12px 20px; cursor: pointer; background: var(--line); color: var(--ink); }
+button.primary { background: var(--ink); color: #fff; }
+button.who { min-width: 150px; font-size: 20px; }
+button.who[aria-pressed="true"] { background: var(--pink); color: #fff; }
+button:disabled { opacity: .45; cursor: default; }
+.step { font-size: 14px; font-weight: 800; color: var(--soft); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 8px; }
+.note { color: var(--soft); font-size: 15px; margin: 8px 0 0; }
+#stage { text-align: center; }
+#kind { font-weight: 800; color: var(--pink); text-transform: uppercase; letter-spacing: .08em; font-size: 14px; }
+#say { font-size: 64px; font-weight: 800; line-height: 1.15; margin: 6px 0; word-break: break-word; }
+#say.small { font-size: 40px; }
+#tip { color: var(--soft); font-size: 19px; min-height: 1.5em; }
+#count { color: var(--soft); font-weight: 700; margin-top: 4px; }
+.rec { width: 120px; height: 120px; border-radius: 50%; background: var(--red); color: #fff; font-size: 18px; margin: 16px auto 8px; display: grid; place-items: center; }
+.rec.on { animation: pulse 1s infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 16px rgba(226,69,60,.18); } }
+.meter { height: 10px; background: var(--line); border-radius: 6px; overflow: hidden; max-width: 320px; margin: 6px auto 0; }
+.meter i { display: block; height: 100%; width: 0; background: var(--green); transition: width .05s; }
+.after { display: flex; gap: 12px; justify-content: center; margin-top: 12px; }
+.keys { color: var(--soft); font-size: 14px; margin-top: 10px; }
+#list { display: flex; flex-wrap: wrap; gap: 6px; }
+#list button { padding: 6px 10px; border-radius: 10px; font-size: 14px; font-weight: 700; background: #F3EEF7; }
+#list button.done { background: #DDF1D6; }
+#list button.done::before { content: '\2713  '; color: var(--green); }
+#list button.cur { outline: 3px solid var(--blue); }
+#list h3 { width: 100%; margin: 10px 0 2px; font-size: 14px; color: var(--soft); text-transform: uppercase; letter-spacing: .06em; }
+#msg { font-weight: 700; color: var(--red); }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Letters game: voice recorder</h1>
+  <p class="lede">About 20 minutes for one voice. Every clip saves straight into the voices folder, so you can stop any time and pick up where you left off.</p>
+
+  <section class="card">
+    <p class="step">1. Who's recording?</p>
+    <div class="row">
+      <button class="who" data-who="mum" aria-pressed="false">Mum</button>
+      <button class="who" data-who="dad" aria-pressed="false">Dad</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <p class="step">2. Choose the voices folder</p>
+    <div class="row">
+      <button class="primary" id="pick" disabled>Choose folder</button>
+      <span id="where"></span>
+    </div>
+    <p class="note">Pick the <b>voices</b> folder next to this page. Chrome asks once whether this page may save files there: choose Allow (or "Allow on every visit").</p>
+    <p id="msg"></p>
+  </section>
+
+  <section class="card" id="stage" hidden>
+    <div id="kind"></div>
+    <div id="say"></div>
+    <div id="tip"></div>
+    <div id="count"></div>
+    <button class="rec" id="rec" aria-label="Record">Record</button>
+    <div class="meter"><i id="lvl"></i></div>
+    <div class="after" id="after" hidden>
+      <button id="again">Play again</button>
+      <button id="redo">Redo</button>
+      <button class="primary" id="keep">Keep and next</button>
+    </div>
+    <div class="after" id="have" hidden>
+      <button id="playsaved">Play saved clip</button>
+      <button class="primary" id="skip">Next</button>
+    </div>
+    <p class="keys">Keys: Space records and stops (it also stops by itself when you go quiet) &middot; Enter keeps &middot; R redoes</p>
+  </section>
+
+  <section class="card" id="all" hidden>
+    <p class="step">Everything to record (tap any one to do it again)</p>
+    <div id="list"></div>
+  </section>
+</main>
+<script>
+const CLIPS = /*CLIPS*/[];
+const KINDS = { sound: 'Letter sound', name: 'Letter name', word: 'Word', prompt: 'Phrase' };
+const $ = id => document.getElementById(id);
+let who = null, root = null, dir = null, done = new Set(), i = 0;
+let stream = null, ctx = null, analyser = null, rec = null, chunks = [], take = null, takeUrl = null, recording = false, audio = new Audio();
+
+document.querySelectorAll('.who').forEach(b => b.addEventListener('click', () => {
+  who = b.dataset.who;
+  document.querySelectorAll('.who').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  $('pick').disabled = false;
+  if (root) openVoice();
+}));
+
+$('pick').addEventListener('click', async () => {
+  if (!window.showDirectoryPicker) { $('msg').textContent = 'This page needs Chrome or Edge (it saves files with their folder picker).'; return; }
+  try { root = await window.showDirectoryPicker({ id: 'letters-voices', mode: 'readwrite' }); }
+  catch (e) { return; }
+  if (await root.requestPermission({ mode: 'readwrite' }) !== 'granted') { $('msg').textContent = 'The page needs permission to save into that folder.'; return; }
+  $('msg').textContent = '';
+  if (root.name.toLowerCase() !== 'voices') $('msg').textContent = `That folder is "${root.name}". Clips will go into ${root.name}\\${who}\\. If that's not the voices folder, choose again.`;
+  openVoice();
+});
+
+async function openVoice() {
+  dir = await root.getDirectoryHandle(who, { create: true });
+  done = new Set();
+  for await (const [name, h] of dir.entries()) if (h.kind === 'file' && name.endsWith('.webm')) done.add(name.slice(0, -5));
+  $('where').textContent = `Saving to ${root.name}\\${who}\\`;
+  $('stage').hidden = false; $('all').hidden = false;
+  drawList();
+  const first = CLIPS.findIndex(c => !done.has(c.id));
+  show(first < 0 ? 0 : first);
+}
+
+function drawList() {
+  const L = $('list'); L.textContent = '';
+  let kind = '';
+  CLIPS.forEach((c, k) => {
+    if (c.kind !== kind) { kind = c.kind; const h = document.createElement('h3'); h.textContent = KINDS[kind] + 's'; L.append(h); }
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = c.say;
+    b.className = (done.has(c.id) ? 'done' : '') + (k === i ? ' cur' : '');
+    b.addEventListener('click', () => show(k));
+    L.append(b);
+  });
+}
+
+function show(k) {
+  stopRecording(true);
+  i = Math.max(0, Math.min(CLIPS.length - 1, k));
+  const c = CLIPS[i];
+  $('kind').textContent = KINDS[c.kind];
+  $('say').textContent = c.say; $('say').className = c.say.length > 14 ? 'small' : '';
+  $('tip').textContent = c.tip;
+  $('count').textContent = `${done.size} of ${CLIPS.length} done` + (done.size === CLIPS.length ? ' - all done, thank you!' : '');
+  $('after').hidden = true;
+  $('have').hidden = !done.has(c.id);
+  take = null;
+  drawList();
+}
+
+async function mic() {
+  if (stream) return true;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: true, autoGainControl: false } });
+  } catch (e) { $('msg').textContent = 'The microphone is blocked. Allow it in the address bar, then try again.'; return false; }
+  ctx = new AudioContext(); analyser = ctx.createAnalyser(); analyser.fftSize = 1024;
+  ctx.createMediaStreamSource(stream).connect(analyser);
+  return true;
+}
+
+async function startRecording() {
+  if (!(await mic())) return;
+  audio.pause();
+  chunks = []; recording = true;
+  rec = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+  rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+  rec.onstop = () => {
+    if (rec._discard) return;
+    take = new Blob(chunks, { type: 'audio/webm' });
+    if (takeUrl) URL.revokeObjectURL(takeUrl);
+    takeUrl = URL.createObjectURL(take);
+    $('after').hidden = false; $('have').hidden = true;
+    play(takeUrl);
+  };
+  rec.start();
+  $('rec').classList.add('on'); $('rec').textContent = 'Stop';
+  watchLevel();
+}
+
+function stopRecording(discard) {
+  if (!recording) return;
+  recording = false;
+  rec._discard = !!discard;
+  if (rec.state !== 'inactive') rec.stop();
+  $('rec').classList.remove('on'); $('rec').textContent = 'Record'; $('lvl').style.width = '0';
+}
+
+function watchLevel() {
+  const buf = new Float32Array(analyser.fftSize);
+  const t0 = performance.now(); let spoke = false, quietSince = 0;
+  const tick = () => {
+    if (!recording) return;
+    analyser.getFloatTimeDomainData(buf);
+    let s = 0; for (const v of buf) s += v * v;
+    const rms = Math.sqrt(s / buf.length), now = performance.now();
+    $('lvl').style.width = Math.min(100, rms * 600) + '%';
+    if (rms > 0.03) { spoke = true; quietSince = 0; }
+    else if (spoke) { quietSince = quietSince || now; if (now - quietSince > 1000) return stopRecording(false); }
+    if (now - t0 > 7000) return stopRecording(false);
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function play(url) { audio.src = url; audio.currentTime = 0; audio.play().catch(() => {}); }
+
+async function keep() {
+  if (!take) return;
+  const c = CLIPS[i];
+  const fh = await dir.getFileHandle(c.id + '.webm', { create: true });
+  const w = await fh.createWritable(); await w.write(take); await w.close();
+  done.add(c.id);
+  const next = CLIPS.findIndex((x, k) => k > i && !done.has(x.id));
+  const any = CLIPS.findIndex(x => !done.has(x.id));
+  show(next >= 0 ? next : any >= 0 ? any : i);
+}
+
+async function playSaved() {
+  const fh = await dir.getFileHandle(CLIPS[i].id + '.webm'); play(URL.createObjectURL(await fh.getFile()));
+}
+
+$('rec').addEventListener('click', () => recording ? stopRecording(false) : startRecording());
+$('again').addEventListener('click', () => takeUrl && play(takeUrl));
+$('redo').addEventListener('click', () => { $('after').hidden = true; startRecording(); });
+$('keep').addEventListener('click', keep);
+$('playsaved').addEventListener('click', playSaved);
+$('skip').addEventListener('click', () => show(i + 1));
+document.addEventListener('keydown', e => {
+  if ($('stage').hidden || e.target.closest('input, textarea')) return;
+  if (e.code === 'Space') { e.preventDefault(); recording ? stopRecording(false) : startRecording(); }
+  else if (e.key === 'Enter') { e.preventDefault(); keep(); }
+  else if (e.key === 'r' || e.key === 'R') { e.preventDefault(); if (!recording) { $('after').hidden = true; startRecording(); } }
+});
+</script>
+</body>
+</html>

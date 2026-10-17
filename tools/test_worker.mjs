@@ -1,0 +1,44 @@
+// Tests the Letters gatekeeper with fake requests:  node tools/test_worker.mjs
+// It builds a copy of _worker_src.js with a made-up key, so it needs neither the real key nor a deploy.
+import { readFileSync, writeFileSync, mkdtempSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
+import { pathToFileURL } from 'url';
+const KEY = 'test-key-' + 'x'.repeat(16);
+const src = readFileSync(new URL('./_worker_src.js', import.meta.url), 'utf8');
+if (src.split('__LETTERS_KEY__').length !== 2) throw new Error('the key placeholder should appear exactly once');
+const file = join(mkdtempSync(join(tmpdir(), 'mbw-')), 'worker.mjs');
+writeFileSync(file, src.replace('__LETTERS_KEY__', KEY));
+const { default: worker } = await import(pathToFileURL(file).href);
+const env = { ASSETS: { fetch: async (req) => {
+  const u = new URL(req.url);
+  if (u.pathname === '/' || u.pathname.endsWith('.html')) return new Response('<html>page</html>', { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0' } });
+  if (u.pathname.startsWith('/letters/')) return new Response('mp3bytes', { status: 200, headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=14400' } });
+  return new Response('asset', { status: 200, headers: { 'Content-Type': 'image/webp' } });
+} } };
+const H = 'https://learn.mikeohalloran.au';
+let fails = 0; const check = (label, ok) => { console.log((ok ? 'ok   ' : 'FAIL ') + label); if (!ok) fails++; };
+const go = (path, cookie) => worker.fetch(new Request(H + path, { headers: cookie ? { Cookie: cookie } : {} }), env);
+let r = await go('/'); check('home page loads without a pass', r.status === 200 && !r.headers.get('Set-Cookie'));
+r = await go('/faces/F01.webp'); check('pictures load without a pass', r.status === 200);
+r = await go('/letters/voices/index.json'); check('letters/ blocked without a pass (404)', r.status === 404);
+r = await go('/letters/voices/mum/sound_a.mp3'); check('a voice clip blocked without a pass', r.status === 404);
+r = await go('/letters/fam/sam.webp'); check('family portrait blocked without a pass', r.status === 404);
+r = await go('/letters/voices/index.json', 'mb_letters_ok=1'); check('the page flag alone is not a pass', r.status === 404);
+r = await go('/letters/voices/index.json', 'mb_letters=wrongkey123456789012'); check('a wrong key is not a pass', r.status === 404);
+r = await go('/?for=Sam&letters=nope'); check('wrong link: redirect, no pass', r.status === 302 && !r.headers.get('Set-Cookie') && r.headers.get('Location') === '/?for=Sam');
+r = await go('/?for=Sam&letters=' + KEY);
+const sc = r.headers.getSetCookie();
+check('secret link: redirect to /?for=Sam#letters', r.status === 302 && r.headers.get('Location') === '/?for=Sam#letters');
+check('secret link: sets both cookies, 400 days, Secure, the key one HttpOnly', sc.length === 2 && sc[0].startsWith('mb_letters=' + KEY) && sc[0].includes('HttpOnly') && sc[0].includes('Max-Age=34560000') && sc[1].startsWith('mb_letters_ok=1') && !sc[1].includes('HttpOnly') && sc.every(c => c.includes('Secure')));
+const cookie = `mb_letters=${KEY}; mb_letters_ok=1; other=x`;
+r = await go('/letters/voices/index.json', cookie); check('with the pass: letters/ loads, private cache', r.status === 200 && r.headers.get('Cache-Control').startsWith('private'));
+r = await go('/', cookie); check('with the pass: the page renews the pass', r.status === 200 && r.headers.getSetCookie().length === 2);
+r = await go('/faces/F01.webp', cookie); check('with the pass: pictures untouched', r.status === 200 && !r.headers.get('Set-Cookie'));
+r = await go('/?letters=off', cookie); const off = r.headers.getSetCookie();
+check('?letters=off clears the pass', r.status === 302 && off.length === 2 && off.every(c => c.includes('Max-Age=0')) && r.headers.get('Location') === '/');
+r = await go('/%6cetters/voices/index.json'); check('encoded path still blocked', r.status === 404);
+r = await go('//letters//voices/index.json'); check('doubled slashes still blocked', r.status === 404);
+r = await go('/LETTERS/voices/index.json'); check('upper case still blocked', r.status === 404);
+r = await go('/%E0%A4%A/x'); check('a broken address is refused', r.status === 400);
+console.log(fails ? `${fails} FAILED` : 'all good');

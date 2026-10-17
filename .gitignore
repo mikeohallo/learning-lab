@@ -1,0 +1,32 @@
+# The monster faces are the Monster Book's artwork; they stay out of the repo, like the book itself.
+faces/
+upload/
+
+# The Letters game: pictures, family portraits and recorded voices stay out
+letters/pics/
+letters/fam/
+letters/voices/
+letters/family.json
+# The lock: the built worker and its key never go in the repo (tools/_worker_src.js has a placeholder)
+_worker.js
+learn_key.txt
+letters_key.txt
+# Private family words, and files built from them
+family_words.py
+letters_family.json
+tools/letters/recorder.html
+tools/letters/letters_gen.py
+tools/letters/voices_gen.py
+tools/letters/work/
+
+# The maths narrator's clips (without them the games use the browser's own voice)
+numbers/voices/
+tools/numbers/voices/
+tools/numbers/listen.html
+tools/numbers/log.txt
+
+# local bits
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

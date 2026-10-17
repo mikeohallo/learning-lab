@@ -1,0 +1,1034 @@
+{
+ "letters": {
+  "a": {
+   "tip": "\"a\" as in bat. Short, not \"ay\".",
+   "name": "ay",
+   "word": "axolotl"
+  },
+  "b": {
+   "tip": "Quick \"b\", lips pop. No \"buh\".",
+   "name": "bee",
+   "word": "bat"
+  },
+  "c": {
+   "tip": "\"k\", as in cat.",
+   "name": "see",
+   "word": "cupcake"
+  },
+  "d": {
+   "tip": "Quick \"d\", tongue tap. No \"duh\".",
+   "name": "dee",
+   "word": "dragon"
+  },
+  "e": {
+   "tip": "\"e\" as in bed.",
+   "name": "ee",
+   "word": "egg"
+  },
+  "f": {
+   "tip": "\"fff\", keep blowing.",
+   "name": "ef",
+   "word": "fox"
+  },
+  "g": {
+   "tip": "\"g\" as in goat, quick. No \"guh\".",
+   "name": "jee",
+   "word": "goat"
+  },
+  "h": {
+   "tip": "Just a breath, \"h\", as in hat.",
+   "name": "aitch",
+   "word": "hat"
+  },
+  "i": {
+   "tip": "\"i\" as in igloo.",
+   "name": "eye",
+   "word": "igloo"
+  },
+  "j": {
+   "tip": "\"j\" as in jellyfish, quick.",
+   "name": "jay",
+   "word": "jellyfish"
+  },
+  "k": {
+   "tip": "\"k\", the same sound as c.",
+   "name": "kay",
+   "word": "kite"
+  },
+  "l": {
+   "tip": "\"lll\", tongue up, hold it.",
+   "name": "el",
+   "word": "log"
+  },
+  "m": {
+   "tip": "\"mmm\", lips closed.",
+   "name": "em",
+   "word": "mermaid"
+  },
+  "n": {
+   "tip": "\"nnn\".",
+   "name": "en",
+   "word": "net"
+  },
+  "o": {
+   "tip": "\"o\" as in octopus.",
+   "name": "oh",
+   "word": "octopus"
+  },
+  "p": {
+   "tip": "\"p\", a puff of air. No \"puh\".",
+   "name": "pee",
+   "word": "penguin"
+  },
+  "q": {
+   "tip": "\"kw\", as in queen.",
+   "name": "cue",
+   "word": "queen"
+  },
+  "r": {
+   "tip": "\"rrr\", a little growl. No \"ruh\".",
+   "name": "ar",
+   "word": "rug"
+  },
+  "s": {
+   "tip": "\"sss\", like a snake.",
+   "name": "ess",
+   "word": "snail"
+  },
+  "t": {
+   "tip": "\"t\", a tongue tap. No \"tuh\".",
+   "name": "tee",
+   "word": "tent"
+  },
+  "u": {
+   "tip": "\"u\" as in up.",
+   "name": "you",
+   "word": "umbrella"
+  },
+  "v": {
+   "tip": "\"vvv\", buzzy lips.",
+   "name": "vee",
+   "word": "van"
+  },
+  "w": {
+   "tip": "\"w\" as in web, short.",
+   "name": "double-you",
+   "word": "web"
+  },
+  "x": {
+   "tip": "\"ks\", like the end of box.",
+   "name": "ex",
+   "word": "box"
+  },
+  "y": {
+   "tip": "\"y\" as in yeti, short.",
+   "name": "why",
+   "word": "yeti"
+  },
+  "z": {
+   "tip": "\"zzz\", like a bee.",
+   "name": "zed",
+   "word": "zip"
+  }
+ },
+ "words": {
+  "axolotl": {
+   "text": "axolotl",
+   "pic": "face:19"
+  },
+  "bat": {
+   "text": "bat",
+   "pic": "face:14"
+  },
+  "cupcake": {
+   "text": "cupcake",
+   "pic": "face:25"
+  },
+  "dragon": {
+   "text": "dragon",
+   "pic": "face:24"
+  },
+  "egg": {
+   "text": "egg",
+   "pic": "new:egg"
+  },
+  "fox": {
+   "text": "fox",
+   "pic": "face:18"
+  },
+  "goat": {
+   "text": "goat",
+   "pic": "new:goat"
+  },
+  "hat": {
+   "text": "hat",
+   "pic": "new:hat"
+  },
+  "igloo": {
+   "text": "igloo",
+   "pic": "new:igloo"
+  },
+  "jellyfish": {
+   "text": "jellyfish",
+   "pic": "face:27"
+  },
+  "kite": {
+   "text": "kite",
+   "pic": "new:kite"
+  },
+  "log": {
+   "text": "log",
+   "pic": "new:log"
+  },
+  "mermaid": {
+   "text": "mermaid",
+   "pic": "face:07"
+  },
+  "net": {
+   "text": "net",
+   "pic": "new:net"
+  },
+  "octopus": {
+   "text": "octopus",
+   "pic": "face:05"
+  },
+  "penguin": {
+   "text": "penguin",
+   "pic": "face:04"
+  },
+  "queen": {
+   "text": "queen",
+   "pic": "new:queen"
+  },
+  "rug": {
+   "text": "rug",
+   "pic": "new:rug"
+  },
+  "snail": {
+   "text": "snail",
+   "pic": "face:29"
+  },
+  "tent": {
+   "text": "tent",
+   "pic": "new:tent"
+  },
+  "umbrella": {
+   "text": "umbrella",
+   "pic": "new:umbrella"
+  },
+  "van": {
+   "text": "van",
+   "pic": "new:van"
+  },
+  "web": {
+   "text": "web",
+   "pic": "new:web"
+  },
+  "box": {
+   "text": "box",
+   "pic": "new:box"
+  },
+  "yeti": {
+   "text": "yeti",
+   "pic": "face:09"
+  },
+  "zip": {
+   "text": "zip",
+   "pic": "new:zip"
+  },
+  "sun": {
+   "text": "sun",
+   "pic": "new:sun"
+  },
+  "pig": {
+   "text": "pig",
+   "pic": "new:pig"
+  },
+  "cup": {
+   "text": "cup",
+   "pic": "new:cup"
+  },
+  "bus": {
+   "text": "bus",
+   "pic": "new:bus"
+  },
+  "bed": {
+   "text": "bed",
+   "pic": "new:bed"
+  },
+  "cat": {
+   "text": "cat",
+   "pic": "new:cat"
+  },
+  "dog": {
+   "text": "dog",
+   "pic": "new:dog"
+  },
+  "bug": {
+   "text": "bug",
+   "pic": "new:bug"
+  },
+  "hen": {
+   "text": "hen",
+   "pic": "new:hen"
+  },
+  "frog": {
+   "text": "frog",
+   "pic": "face:10"
+  },
+  "crab": {
+   "text": "crab",
+   "pic": "new:crab"
+  },
+  "drum": {
+   "text": "drum",
+   "pic": "new:drum"
+  },
+  "flag": {
+   "text": "flag",
+   "pic": "new:flag"
+  },
+  "nest": {
+   "text": "nest",
+   "pic": "new:nest"
+  }
+ },
+ "spell": {
+  "1": [
+   "fox",
+   "bat",
+   "sun",
+   "pig",
+   "cup",
+   "net",
+   "rug",
+   "van",
+   "web",
+   "box",
+   "zip",
+   "hat",
+   "log",
+   "bus",
+   "bed",
+   "cat",
+   "dog",
+   "bug",
+   "hen"
+  ],
+  "2": [
+   "frog",
+   "crab",
+   "drum",
+   "flag",
+   "nest",
+   "tent"
+  ]
+ },
+ "prompts": {
+  "watch": "Watch me first.",
+  "trace": "Your turn. Trace the letter.",
+  "start": "Start at the green dot.",
+  "arrow": "Follow the arrow.",
+  "line": "Back to the line.",
+  "spell": "Let's spell it.",
+  "tap": "Tap the letters to spell it.",
+  "name": "Let's spell your name.",
+  "another": "Let's do another one.",
+  "well_done": "Well done!",
+  "did_it": "You did it!",
+  "great_writing": "Great writing!",
+  "great_spelling": "Amazing spelling!",
+  "sound_out": "Sound it out with me.",
+  "listen": "Listen.",
+  "which": "Which letter makes this sound?",
+  "starts": "What does it start with?"
+ },
+ "newPictures": {
+  "hat": "a red sun hat",
+  "igloo": "a small white igloo made of snow blocks",
+  "kite": "a diamond-shaped kite with a bow tail",
+  "log": "a short brown log",
+  "net": "a butterfly net with a wooden handle",
+  "queen": "a smiling queen with a gold crown and a purple dress",
+  "rug": "a striped round rug",
+  "tent": "a small triangle camping tent",
+  "van": "a little blue van, side view",
+  "web": "a round spider web",
+  "box": "a cardboard box with the flaps open",
+  "zip": "a big zip, half open, on a strip of fabric",
+  "sun": "a smiling yellow sun",
+  "pig": "a pink pig standing side-on",
+  "cup": "a cup with a handle",
+  "bus": "a yellow bus, side view",
+  "bed": "a single bed with a pillow and blanket",
+  "cat": "a sitting ginger cat",
+  "dog": "a sitting brown dog",
+  "bug": "a red ladybug, top view",
+  "hen": "a brown hen standing side-on",
+  "crab": "a red crab with two big claws",
+  "drum": "a toy drum with two drumsticks",
+  "flag": "a triangle pennant flag with bright rainbow stripes on a wooden stick (not any country's flag)",
+  "nest": "a bird nest with three blue eggs",
+  "egg": "one white egg",
+  "goat": "a white goat standing side-on",
+  "umbrella": "an open red umbrella"
+ },
+ "clips": [
+  {
+   "id": "sound_a",
+   "say": "a",
+   "kind": "sound",
+   "tip": "\"a\" as in bat. Short, not \"ay\"."
+  },
+  {
+   "id": "sound_b",
+   "say": "b",
+   "kind": "sound",
+   "tip": "Quick \"b\", lips pop. No \"buh\"."
+  },
+  {
+   "id": "sound_c",
+   "say": "c",
+   "kind": "sound",
+   "tip": "\"k\", as in cat."
+  },
+  {
+   "id": "sound_d",
+   "say": "d",
+   "kind": "sound",
+   "tip": "Quick \"d\", tongue tap. No \"duh\"."
+  },
+  {
+   "id": "sound_e",
+   "say": "e",
+   "kind": "sound",
+   "tip": "\"e\" as in bed."
+  },
+  {
+   "id": "sound_f",
+   "say": "f",
+   "kind": "sound",
+   "tip": "\"fff\", keep blowing."
+  },
+  {
+   "id": "sound_g",
+   "say": "g",
+   "kind": "sound",
+   "tip": "\"g\" as in goat, quick. No \"guh\"."
+  },
+  {
+   "id": "sound_h",
+   "say": "h",
+   "kind": "sound",
+   "tip": "Just a breath, \"h\", as in hat."
+  },
+  {
+   "id": "sound_i",
+   "say": "i",
+   "kind": "sound",
+   "tip": "\"i\" as in igloo."
+  },
+  {
+   "id": "sound_j",
+   "say": "j",
+   "kind": "sound",
+   "tip": "\"j\" as in jellyfish, quick."
+  },
+  {
+   "id": "sound_k",
+   "say": "k",
+   "kind": "sound",
+   "tip": "\"k\", the same sound as c."
+  },
+  {
+   "id": "sound_l",
+   "say": "l",
+   "kind": "sound",
+   "tip": "\"lll\", tongue up, hold it."
+  },
+  {
+   "id": "sound_m",
+   "say": "m",
+   "kind": "sound",
+   "tip": "\"mmm\", lips closed."
+  },
+  {
+   "id": "sound_n",
+   "say": "n",
+   "kind": "sound",
+   "tip": "\"nnn\"."
+  },
+  {
+   "id": "sound_o",
+   "say": "o",
+   "kind": "sound",
+   "tip": "\"o\" as in octopus."
+  },
+  {
+   "id": "sound_p",
+   "say": "p",
+   "kind": "sound",
+   "tip": "\"p\", a puff of air. No \"puh\"."
+  },
+  {
+   "id": "sound_q",
+   "say": "q",
+   "kind": "sound",
+   "tip": "\"kw\", as in queen."
+  },
+  {
+   "id": "sound_r",
+   "say": "r",
+   "kind": "sound",
+   "tip": "\"rrr\", a little growl. No \"ruh\"."
+  },
+  {
+   "id": "sound_s",
+   "say": "s",
+   "kind": "sound",
+   "tip": "\"sss\", like a snake."
+  },
+  {
+   "id": "sound_t",
+   "say": "t",
+   "kind": "sound",
+   "tip": "\"t\", a tongue tap. No \"tuh\"."
+  },
+  {
+   "id": "sound_u",
+   "say": "u",
+   "kind": "sound",
+   "tip": "\"u\" as in up."
+  },
+  {
+   "id": "sound_v",
+   "say": "v",
+   "kind": "sound",
+   "tip": "\"vvv\", buzzy lips."
+  },
+  {
+   "id": "sound_w",
+   "say": "w",
+   "kind": "sound",
+   "tip": "\"w\" as in web, short."
+  },
+  {
+   "id": "sound_x",
+   "say": "x",
+   "kind": "sound",
+   "tip": "\"ks\", like the end of box."
+  },
+  {
+   "id": "sound_y",
+   "say": "y",
+   "kind": "sound",
+   "tip": "\"y\" as in yeti, short."
+  },
+  {
+   "id": "sound_z",
+   "say": "z",
+   "kind": "sound",
+   "tip": "\"zzz\", like a bee."
+  },
+  {
+   "id": "name_a",
+   "say": "A",
+   "kind": "name",
+   "tip": "The letter name: \"ay\"."
+  },
+  {
+   "id": "name_b",
+   "say": "B",
+   "kind": "name",
+   "tip": "The letter name: \"bee\"."
+  },
+  {
+   "id": "name_c",
+   "say": "C",
+   "kind": "name",
+   "tip": "The letter name: \"see\"."
+  },
+  {
+   "id": "name_d",
+   "say": "D",
+   "kind": "name",
+   "tip": "The letter name: \"dee\"."
+  },
+  {
+   "id": "name_e",
+   "say": "E",
+   "kind": "name",
+   "tip": "The letter name: \"ee\"."
+  },
+  {
+   "id": "name_f",
+   "say": "F",
+   "kind": "name",
+   "tip": "The letter name: \"ef\"."
+  },
+  {
+   "id": "name_g",
+   "say": "G",
+   "kind": "name",
+   "tip": "The letter name: \"jee\"."
+  },
+  {
+   "id": "name_h",
+   "say": "H",
+   "kind": "name",
+   "tip": "The letter name: \"aitch\"."
+  },
+  {
+   "id": "name_i",
+   "say": "I",
+   "kind": "name",
+   "tip": "The letter name: \"eye\"."
+  },
+  {
+   "id": "name_j",
+   "say": "J",
+   "kind": "name",
+   "tip": "The letter name: \"jay\"."
+  },
+  {
+   "id": "name_k",
+   "say": "K",
+   "kind": "name",
+   "tip": "The letter name: \"kay\"."
+  },
+  {
+   "id": "name_l",
+   "say": "L",
+   "kind": "name",
+   "tip": "The letter name: \"el\"."
+  },
+  {
+   "id": "name_m",
+   "say": "M",
+   "kind": "name",
+   "tip": "The letter name: \"em\"."
+  },
+  {
+   "id": "name_n",
+   "say": "N",
+   "kind": "name",
+   "tip": "The letter name: \"en\"."
+  },
+  {
+   "id": "name_o",
+   "say": "O",
+   "kind": "name",
+   "tip": "The letter name: \"oh\"."
+  },
+  {
+   "id": "name_p",
+   "say": "P",
+   "kind": "name",
+   "tip": "The letter name: \"pee\"."
+  },
+  {
+   "id": "name_q",
+   "say": "Q",
+   "kind": "name",
+   "tip": "The letter name: \"cue\"."
+  },
+  {
+   "id": "name_r",
+   "say": "R",
+   "kind": "name",
+   "tip": "The letter name: \"ar\"."
+  },
+  {
+   "id": "name_s",
+   "say": "S",
+   "kind": "name",
+   "tip": "The letter name: \"ess\"."
+  },
+  {
+   "id": "name_t",
+   "say": "T",
+   "kind": "name",
+   "tip": "The letter name: \"tee\"."
+  },
+  {
+   "id": "name_u",
+   "say": "U",
+   "kind": "name",
+   "tip": "The letter name: \"you\"."
+  },
+  {
+   "id": "name_v",
+   "say": "V",
+   "kind": "name",
+   "tip": "The letter name: \"vee\"."
+  },
+  {
+   "id": "name_w",
+   "say": "W",
+   "kind": "name",
+   "tip": "The letter name: \"double-you\"."
+  },
+  {
+   "id": "name_x",
+   "say": "X",
+   "kind": "name",
+   "tip": "The letter name: \"ex\"."
+  },
+  {
+   "id": "name_y",
+   "say": "Y",
+   "kind": "name",
+   "tip": "The letter name: \"why\"."
+  },
+  {
+   "id": "name_z",
+   "say": "Z",
+   "kind": "name",
+   "tip": "The letter name: \"zed\"."
+  },
+  {
+   "id": "word_axolotl",
+   "say": "axolotl",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_bat",
+   "say": "bat",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_cupcake",
+   "say": "cupcake",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_dragon",
+   "say": "dragon",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_egg",
+   "say": "egg",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_fox",
+   "say": "fox",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_goat",
+   "say": "goat",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_hat",
+   "say": "hat",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_igloo",
+   "say": "igloo",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_jellyfish",
+   "say": "jellyfish",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_kite",
+   "say": "kite",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_log",
+   "say": "log",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_mermaid",
+   "say": "mermaid",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_net",
+   "say": "net",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_octopus",
+   "say": "octopus",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_penguin",
+   "say": "penguin",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_queen",
+   "say": "queen",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_rug",
+   "say": "rug",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_snail",
+   "say": "snail",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_tent",
+   "say": "tent",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_umbrella",
+   "say": "umbrella",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_van",
+   "say": "van",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_web",
+   "say": "web",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_box",
+   "say": "box",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_yeti",
+   "say": "yeti",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_zip",
+   "say": "zip",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_sun",
+   "say": "sun",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_pig",
+   "say": "pig",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_cup",
+   "say": "cup",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_bus",
+   "say": "bus",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_bed",
+   "say": "bed",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_cat",
+   "say": "cat",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_dog",
+   "say": "dog",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_bug",
+   "say": "bug",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_hen",
+   "say": "hen",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_frog",
+   "say": "frog",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_crab",
+   "say": "crab",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_drum",
+   "say": "drum",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_flag",
+   "say": "flag",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "word_nest",
+   "say": "nest",
+   "kind": "word",
+   "tip": "Say the word clearly, like reading it to her."
+  },
+  {
+   "id": "say_watch",
+   "say": "Watch me first.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_trace",
+   "say": "Your turn. Trace the letter.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_start",
+   "say": "Start at the green dot.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_arrow",
+   "say": "Follow the arrow.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_line",
+   "say": "Back to the line.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_spell",
+   "say": "Let's spell it.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_tap",
+   "say": "Tap the letters to spell it.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_name",
+   "say": "Let's spell your name.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_another",
+   "say": "Let's do another one.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_well_done",
+   "say": "Well done!",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_did_it",
+   "say": "You did it!",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_great_writing",
+   "say": "Great writing!",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_great_spelling",
+   "say": "Amazing spelling!",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_sound_out",
+   "say": "Sound it out with me.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_listen",
+   "say": "Listen.",
+   "kind": "prompt",
+   "tip": "Warm and clear."
+  },
+  {
+   "id": "say_which",
+   "say": "Which letter makes this sound?",
+   "kind": "prompt",
+   "tip": "Warm and clear.",
+   "optional": true
+  },
+  {
+   "id": "say_starts",
+   "say": "What does it start with?",
+   "kind": "prompt",
+   "tip": "Warm and clear.",
+   "optional": true
+  }
+ ]
+}
