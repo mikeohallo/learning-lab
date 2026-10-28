@@ -22,6 +22,15 @@ After the deploy:
 - check that `letters/` still answers 404 without the pass, including an upper-case path;
 - record the live commit in the project handover (not in this repo).
 
+## Uploading: Mike clicks
+
+Claude's own safety check won't let a chat put a site live, whatever line it holds, and the chat never works round that check (agreed with the ideas chat, 28 Oct 2026). So once the gate above passes:
+
+1. The chat builds the upload zip from the checked files. Rollback zips live in a folder of their own, away from the upload zip, so the file picker can't offer the wrong one.
+2. The chat opens the project's **Create deployment → Production** page in Chrome and stops there. It tells Mike exactly which file to choose.
+3. **Mike chooses the zip and clicks Save and deploy.**
+4. The chat checks the live site against the commit: every gated file, not a sample.
+
 ## Before every push
 
 This repo is public. Before each push, scan every file for the lock's key, the family words, API keys, personal email addresses and paths on Mike's machine. The key, `_worker.js`, the family words and the media stay out (see `.gitignore`).
