@@ -22,14 +22,14 @@ After the deploy:
 - check that `letters/` still answers 404 without the pass, including an upper-case path;
 - record the live commit in the project handover (not in this repo).
 
-## Uploading: Mike clicks
+## Uploading: the chat uploads; Mike's click is the fallback
 
-Claude's own safety check won't let a chat put a site live, whatever line it holds, and the chat never works round that check (agreed with the ideas chat, 28 Oct 2026). So once the gate above passes:
+Mike's line is the approval, so once the gate above passes the chat does the upload (agreed with the ideas chat, 29 Oct 2026, replacing the 28 Oct rule that Mike always clicks):
 
-1. The chat builds the upload zip from the checked files. Rollback zips live in a folder of their own, away from the upload zip, so the file picker can't offer the wrong one.
-2. The chat opens the project's **Create deployment → Production** page in Chrome and stops there. It tells Mike exactly which file to choose.
-3. **Mike chooses the zip and clicks Save and deploy.**
-4. The chat checks the live site against the commit: every gated file, not a sample.
+1. The chat builds the upload zip from the checked files. Rollback zips live in a folder of their own, away from the upload zip, so the wrong one can't be picked by mistake.
+2. The chat uploads it in Mike's Chrome: the project's **Create deployment → Production** page, the zip, then Save and deploy.
+3. **If Claude's own safety check refuses the upload** in a given deploy, the chat stops at the filled form and tells Mike exactly which file to choose and what to click, and he does that one deploy. The click is the fallback, never the default. The chat never changes how it uploads to get round the check.
+4. Either way, the chat checks the live site against the commit: every gated file, not a sample.
 
 ## Before every push
 

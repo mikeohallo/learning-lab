@@ -1,6 +1,12 @@
 # Learning Lab
 
-Learning games for my daughter, starring the 30 monsters from her [Monster Book](https://github.com/mikeohallo/monster-book). Live at [learn.mikeohalloran.au](https://learn.mikeohalloran.au/), one of three labs behind [play.mikeohalloran.au](https://play.mikeohalloran.au/): Monster Lab, Learning Lab and Seek Lab.
+**For** a child learning to count and to read, on a phone, with the monsters she already knows from her [Monster Book](https://github.com/mikeohallo/monster-book). **It does** six number games (counting, seeing a small number at a glance, a ten-frame plate, more or less, what comes next, adding and taking away) and four letter games (tracing in NSW Foundation Style, spelling, sounds, first sound), each with levels that get harder.
+
+**Try it:** [learn.mikeohalloran.au](https://learn.mikeohalloran.au/), one of three labs behind [play.mikeohalloran.au](https://play.mikeohalloran.au/): Monster Lab, Learning Lab and Seek Lab. Numbers are open to everyone. Letters use the family's recorded voices and pictures, so they open only in a browser set up with a private link.
+
+**What's measured:** three test suites play the games in a real browser on a phone, a folding phone and a laptop: every letter a to z traced the way a finger would, then the wrong start, the wrong direction and going off the line; all six number games at every level; and that a browser without the pass never asks for the family's words. A fourth tests the private lock with fake requests, including disguised addresses and the pass renewing.
+
+**Where the AI is:** the narrator for Numbers is a text-to-speech voice. For Letters it isn't: every voice tried said "bee" or "buh" for b, and that extra sound is exactly what teachers train out, so the letter sounds are recorded by a parent. That decision, and the lock that keeps those recordings private, are the two things this repo is most about.
 
 ![The Learning Lab on a phone: the games, tracing a letter, Feed the monster and More or less](docs/screenshot.png)
 
