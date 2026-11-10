@@ -23,11 +23,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Playwright, Pillow and ffmpeg (the voice maker's test processes a clip)
+      - name: Install Playwright, Pillow, numpy and ffmpeg (the voice maker's test processes clips)
         run: |
-          pip install playwright==1.63.0 pillow==12.3.0
+          pip install playwright==1.63.0 pillow==12.3.0 numpy
           python -m playwright install --with-deps chromium
           sudo apt-get install -y --no-install-recommends ffmpeg
+      - name: The page's two fonts (Open Font Licence, from Google's font repo), so layouts measure as on a phone
+        run: |
+          curl -fsSL -o Fredoka.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/fredoka/Fredoka%5Bwdth,wght%5D.ttf'
+          curl -fsSL -o Nunito.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/nunito/Nunito%5Bwght%5D.ttf'
       - name: Stand-in monster faces (the real ones stay out of the repo)
         run: python tools/stand_in_faces.py
       - name: Numbers games
@@ -67,12 +71,17 @@ jobs:
           if ! git cat-file -e "$base^{commit}" 2>/dev/null; then base="$(git rev-parse HEAD~1)"; fi
           echo "sha=$base" >> "$GITHUB_OUTPUT"
           echo "Comparing against $base"
+      - name: The page's two fonts (Open Font Licence, from Google's font repo), so layouts measure as on a phone
+        run: |
+          curl -fsSL -o Fredoka.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/fredoka/Fredoka%5Bwdth,wght%5D.ttf'
+          curl -fsSL -o Nunito.ttf 'https://raw.githubusercontent.com/google/fonts/main/ofl/nunito/Nunito%5Bwght%5D.ttf'
       - name: Draw both versions
         env:
           BASE: ${{ steps.base.outputs.sha }}
         run: |
           git worktree add "$RUNNER_TEMP/base" "$BASE"
           python tools/stand_in_faces.py "$RUNNER_TEMP/base"
+          cp Fredoka.ttf Nunito.ttf "$RUNNER_TEMP/base/"
           python tools/stand_in_faces.py
           python tools/test_screens.py shoot "$RUNNER_TEMP/base" "$RUNNER_TEMP/shots-base"
           python tools/test_screens.py shoot . "$RUNNER_TEMP/shots-new"

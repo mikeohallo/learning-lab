@@ -25,6 +25,10 @@ tools/numbers/voices/
 tools/numbers/listen.html
 tools/numbers/log.txt
 
+# The page's two Google fonts, fetched for the tests (not part of the site)
+Fredoka.ttf
+Nunito.ttf
+
 # local bits
 __pycache__/
 *.pyc

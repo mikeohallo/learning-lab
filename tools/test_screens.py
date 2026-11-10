@@ -6,6 +6,7 @@
 Only the public pages are drawn: the games page and the six Numbers games, as a browser without the Letters pass
 sees them. Nothing private is drawn, and this script prints words only (it never uploads a picture).
 The same seed, a frozen clock and no animation make every drawing repeatable, so two drawings of the same code match.
+The page's fonts are used when Fredoka.ttf and Nunito.ttf sit next to index.html (CI fetches them from Google's font repo).
 The site has one theme (no dark mode), so each page is drawn once per width."""
 import functools, http.server, socketserver, sys, threading
 from pathlib import Path
@@ -30,14 +31,18 @@ def shoot(site, out):
     http.server.SimpleHTTPRequestHandler.log_message = lambda *a: None
     srv = socketserver.TCPServer(('127.0.0.1', 0), functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(site)))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
-    base = f'http://127.0.0.1:{srv.server_address[1]}/index.html'
+    port = srv.server_address[1]
+    base = f'http://127.0.0.1:{port}/index.html'
+    # the page's two Google fonts, served from the site folder when they're there (CI fetches them), else the browser's own
+    css = ''.join("@font-face{font-family:'%s';font-weight:%s;src:url(http://127.0.0.1:%d/%s.ttf)}" % (f, w, port, f)
+                  for f, w in (('Fredoka', '300 700'), ('Nunito', '200 1000')) if (site / f'{f}.ttf').exists())
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         for size, (w, h) in SIZES.items():
             for name, hash_ in PAGES.items():
                 ctx = b.new_context(viewport={'width': w, 'height': h}, device_scale_factor=1,
                                     is_mobile=size == 'phone', has_touch=size == 'phone')
-                ctx.route('https://fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=''))
+                ctx.route('https://fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=css))
                 ctx.route('https://fonts.gstatic.com/**', lambda r: r.abort())
                 ctx.route('**/numbers/voices/index.json', lambda r: r.fulfill(status=200, content_type='application/json', body='{"clips":[]}'))
                 ctx.route('**/letters/**', lambda r: r.fulfill(status=404, body=''))     # as a browser without the pass
