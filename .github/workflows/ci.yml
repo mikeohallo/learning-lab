@@ -23,10 +23,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Playwright and Pillow
+      - name: Install Playwright, Pillow and ffmpeg (the voice maker's test processes a clip)
         run: |
           pip install playwright==1.63.0 pillow==12.3.0
           python -m playwright install --with-deps chromium
+          sudo apt-get install -y --no-install-recommends ffmpeg
       - name: Stand-in monster faces (the real ones stay out of the repo)
         run: python tools/stand_in_faces.py
       - name: Numbers games
