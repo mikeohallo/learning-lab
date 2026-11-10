@@ -329,3 +329,4 @@ with sync_playwright() as pw:
     b.close()
 srv.shutdown(); shutil.rmtree(TMP, ignore_errors=True)
 print('PROBLEMS:' if problems else 'all good', *problems, sep='\n  ')
+sys.exit(1 if problems else 0)

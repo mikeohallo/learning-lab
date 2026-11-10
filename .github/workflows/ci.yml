@@ -1,0 +1,85 @@
+# Tests and a screenshot check on every push and pull request. Nothing here deploys: the site is uploaded by hand
+# on Mike's own line (see CLAUDE.md), never from GitHub. No secrets are used, and nothing is uploaded: this repo is
+# public, so its logs are too, and they print words only.
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright and Pillow
+        run: |
+          pip install playwright==1.63.0 pillow==12.3.0
+          python -m playwright install --with-deps chromium
+      - name: Stand-in monster faces (the real ones stay out of the repo)
+        run: python tools/stand_in_faces.py
+      - name: Numbers games
+        run: python tools/test_numbers.py "$RUNNER_TEMP/numbers"
+      - name: Letters lock
+        run: node tools/test_worker.mjs
+      # Not run here, on purpose: tools/test_letters.py needs the family's private Letters files, and
+      # tools/test_carry.py needs the Monster Lab's site next to this one. Both run on Mike's machine.
+
+  screens:
+    # A signal, not a gate: a page that changed on purpose shows as CHANGED until it's merged.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Playwright and Pillow
+        run: |
+          pip install playwright==1.63.0 pillow==12.3.0
+          python -m playwright install --with-deps chromium
+      - name: Pick the version to compare against
+        id: base
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          BEFORE: ${{ github.event.before }}
+          REF: ${{ github.ref }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then base="$PR_BASE"
+          elif [ "$REF" = refs/heads/main ]; then base="$BEFORE"
+          else base="$(git merge-base origin/main HEAD)"; fi
+          if ! git cat-file -e "$base^{commit}" 2>/dev/null; then base="$(git rev-parse HEAD~1)"; fi
+          echo "sha=$base" >> "$GITHUB_OUTPUT"
+          echo "Comparing against $base"
+      - name: Draw both versions
+        env:
+          BASE: ${{ steps.base.outputs.sha }}
+        run: |
+          git worktree add "$RUNNER_TEMP/base" "$BASE"
+          python tools/stand_in_faces.py "$RUNNER_TEMP/base"
+          python tools/stand_in_faces.py
+          python tools/test_screens.py shoot "$RUNNER_TEMP/base" "$RUNNER_TEMP/shots-base"
+          python tools/test_screens.py shoot . "$RUNNER_TEMP/shots-new"
+      - name: Compare (words only)
+        run: |
+          set -o pipefail
+          python tools/test_screens.py compare "$RUNNER_TEMP/shots-base" "$RUNNER_TEMP/shots-new" | tee "$RUNNER_TEMP/screens.txt"
+      - name: Summary
+        if: always()
+        run: |
+          { echo '### Screenshot check'; echo '```'; cat "$RUNNER_TEMP/screens.txt" 2>/dev/null || echo 'no result'; echo '```'; } >> "$GITHUB_STEP_SUMMARY"

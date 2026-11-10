@@ -51,12 +51,15 @@ It's one HTML file, like the Monster Book's site: no framework, no bundler, no a
 | `tools/test_letters.py` | Traces every letter a to z the way a finger would, then tries the wrong start, the wrong direction and going off the line; spells every level, including a name; plays Sounds and First sound at both levels; checks phones, a folding phone and a laptop; that a browser without the pass gets no Letters and never asks for the family words; and that a copy without the family file has none |
 | `tools/test_numbers.py` | Plays all six Numbers games: counting, counting twice, wrong and right answers, peeking, too few and too many cookies, one more and one less, more and fewer, what comes next and before, counting down, jumping on and rolling off, full rounds at every level; every layout at four screen sizes with no monster overlapping or cut off, and the jar and Feed button on the first screen; the narrator's clips, the browser-voice fallback and mute; and the voice maker against a fake API, including Google's daily limit |
 | `tools/test_carry.py` | The one-time move of her progress from the monster site, with both sites served under their real addresses inside the test browser |
+| `tools/test_screens.py` | Draws the games page and the six Numbers games at a phone width and a laptop width, with a fixed seed and a frozen clock so every drawing repeats exactly, and compares two versions of the site page by page (the site has one theme, so there's no dark version) |
+| `tools/stand_in_faces.py` | Plain numbered circles in place of the monster faces, so the tests can run without the book's artwork |
+| `.github/workflows/ci.yml` | On every push: the Numbers games and the lock tests, then the screenshot check against `main`. It prints words only and uploads nothing, and it never deploys (the site is uploaded by hand) |
 | `tools/letters/` | The Letters tools: tracing paths from the font, the word list, a recording page, and the picture and voice tools ([its own README](tools/letters/README.md)) |
 | `tools/numbers/` | The maths narrator: the lines, the text-to-speech maker and the clip processing ([its own README](tools/numbers/README.md)) |
 | `letters/` | The Edu NSW ACT Foundation font the tracing game uses (Open Font Licence) |
 | `docs/` | Screenshot |
 
-The monster faces aren't in the repo; they're the book's artwork. Neither are the Letters pictures and voices, the family words, or the narrator's clips. The tests need the faces next to `index.html` to run.
+The monster faces aren't in the repo; they're the book's artwork. Neither are the Letters pictures and voices, the family words, or the narrator's clips. The tests need faces next to `index.html`: the real ones, or the stand-ins from `tools/stand_in_faces.py`. GitHub runs the Numbers and lock tests; the Letters and progress-move tests need private files and the Monster Lab's site, so they run on the family's machine.
 
 ## Running it locally
 

@@ -42,3 +42,4 @@ r = await go('//letters//voices/index.json'); check('doubled slashes still block
 r = await go('/LETTERS/voices/index.json'); check('upper case still blocked', r.status === 404);
 r = await go('/%E0%A4%A/x'); check('a broken address is refused', r.status === 400);
 console.log(fails ? `${fails} FAILED` : 'all good');
+process.exitCode = fails ? 1 : 0;
